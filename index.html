@@ -304,11 +304,14 @@ body {
 
 <div class="container">
 
-  <!-- WeChat browser warning -->
-  <div id="wechat-warn" class="hidden" style="background:#fdf2f2;border:2px solid #d48585;border-radius:12px;padding:14px;margin-bottom:16px;text-align:center;">
-    <p style="font-size:14px;color:#c44;font-weight:600;margin:0;">⚠️ 微信内功能受限</p>
-    <p style="font-size:13px;color:#8c7b6b;margin:6px 0 12px;">录音和分享需要浏览器打开</p>
-    <p style="font-size:13px;color:#8b6f4e;margin:0;">👉 点右上角「···」→「在浏览器打开」</p>
+  <!-- WeChat browser guide: only shows in WeChat -->
+  <div id="wechat-guide" class="hidden">
+    <div class="card" style="text-align:center;padding:20px 24px;">
+      <p style="font-size:20px;margin-bottom:4px;">📱</p>
+      <p style="font-size:15px;font-weight:600;color:#3d3226;margin:0 0 6px;">建议用浏览器打开</p>
+      <p style="font-size:13px;color:#8c7b6b;margin:0 0 12px;">可以录音、对比发音 ✨</p>
+      <p style="font-size:13px;color:#8b6f4e;margin:0;">点右上角「···」→「在浏览器打开」</p>
+    </div>
   </div>
 
   <!-- ====== START SCREEN ====== -->
@@ -443,7 +446,7 @@ body {
 // ====== WECHAT DETECTION ======
 const isWeChat = /MicroMessenger/i.test(navigator.userAgent);
 if (isWeChat) {
-  document.getElementById('wechat-warn').classList.remove('hidden');
+  document.getElementById('wechat-guide').classList.remove('hidden');
 }
 
 // ====== QUIZ DATA ======
