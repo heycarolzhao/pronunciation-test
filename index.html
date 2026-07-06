@@ -261,7 +261,7 @@ body {
     <div class="header">
       <div class="emoji">🗣️</div>
       <h1>你的发音盲区在哪里？</h1>
-      <p class="subtitle">10 道题 · 5 分钟 · 找到中国人最容易发错的音</p>
+      <p class="subtitle">8 道题 · 4 分钟 · 找到中国人最容易发错的音</p>
     </div>
     <div class="card">
       <p style="font-size: 14px; color: #8c7b6b; line-height: 1.7;">
@@ -356,21 +356,21 @@ const questions = [
     text: "下面哪一组单词的<strong>元音发音不同</strong>？",
     options: ["ship / sheep", "cat / bat", "dog / frog", "meet / meat"],
     answer: 0,
-    explain: { correct: "ship 是短元音 /ɪ/，sheep 是长元音 /iː/——长短音不分是中国人第一高频发音错误", type: "长元音 vs 短元音" }
+    explain: { correct: "ship 是短元音 /ɪ/，sheep 是长元音 /iː/——长短音不分是中国人第一高频发音错误", type: "长元音 /iː/ vs 短元音 /ɪ/" }
   },
   {
     id: 2,
-    text: "下面哪个单词里的「th」发音<strong>和其他三个不同</strong>？",
-    options: ["think", "three", "this", "thank"],
-    answer: 2,
-    explain: { correct: "this 的 th 是浊辅音 /ð/（声带震动），其他三个都是清辅音 /θ/（声带不震）", type: "清辅音 vs 浊辅音" }
+    text: "下面哪个单词的<strong>辅音需要咬舌</strong>（舌尖放在上下齿之间）？",
+    options: ["six", "three", "say", "see"],
+    answer: 1,
+    explain: { correct: "three 的 th 是咬舌音 /θ/——而 six/say/see 的 s 是 /s/ 音，中文里就有。很多同学直接用 s 代替咬舌 th", type: "咬舌音 /θ/ vs /s/" }
   },
   {
     id: 3,
-    text: "以下哪一组的<strong>元音发音不同</strong>？",
-    options: ["full / fool", "sun / fun", "bit / fit", "see / fee"],
-    answer: 0,
-    explain: { correct: "full 是 /ʊ/（短），fool 是 /uː/（长）——这也是典型的长短音盲区", type: "长元音 vs 短元音" }
+    text: "以下哪一组单词的<strong>元音发音不同</strong>？",
+    options: ["time / right", "cat / sad", "light / cat", "like / bike"],
+    answer: 2,
+    explain: { correct: "light 是双元音 /aɪ/（嘴巴从 /a/ 滑到 /ɪ/），cat 是单元音 /æ/（嘴巴张大不动）——双元音要滑动，很多同学读成一个音", type: "双元音 /aɪ/ vs 单元音 /æ/" }
   },
   {
     id: 4,
@@ -388,38 +388,24 @@ const questions = [
   },
   {
     id: 6,
-    text: "「Rice 米饭」的结尾辅音是哪一个？",
-    options: ["/s/（清辅音，像「嘶」）", "/z/（浊辅音，像「滋」）", "/ʃ/（像「嘘」）", "/tʃ/（像「吃」）"],
-    answer: 0,
-    explain: { correct: "rice 以清辅音 /s/ 结尾——而 rise 以浊辅音 /z/ 结尾，它们是不同的单词！", type: "清辅音 vs 浊辅音" }
-  },
-  {
-    id: 7,
     text: "下面哪个单词<strong>不包含 /æ/ 音</strong>（嘴巴张大、像「哎」的音）？",
     options: ["cat", "bad", "bed", "apple"],
     answer: 2,
     explain: { correct: "bed 是 /e/（嘴巴小一点），cat/bad/apple 都是 /æ/（嘴巴张大）——/æ/ 中文里没有，很多同学发不准", type: "元音 /æ/ vs /e/" }
   },
   {
-    id: 8,
+    id: 7,
     text: "「Work 工作」的元音和下面哪个<strong>一样</strong>？",
     options: ["hot 里的 /ɒ/", "bird 里的 /ɜː/", "walk 里的 /ɔː/", "car 里的 /ɑː/"],
     answer: 1,
     explain: { correct: "work 和 bird 都是长元音 /ɜː/——很多同学把 work 读成 walk（/ɔː/），意思完全不一样", type: "元音 /ɜː/ vs /ɔː/" }
   },
   {
-    id: 9,
-    text: "「Host 主人」和「Most 大多数」，<strong>押韵吗</strong>？",
-    options: ["押韵", "不押韵，host 更短", "不押韵，most 更短", "英语里没有押韵这个说法"],
-    answer: 0,
-    explain: { correct: "host 和 most 都押 /əʊst/ 韵——但很多同学把 host 读成 '后斯特'（加了多余的音）", type: "双元音 /əʊ/" }
-  },
-  {
-    id: 10,
-    text: "下面哪个单词的<strong>结尾 L 最难发</strong>（称为「Dark L」）？",
-    options: ["light", "girl", "love", "like"],
+    id: 8,
+    text: "下面哪一个单词<strong>没有 /r/ 卷舌音</strong>？",
+    options: ["world", "idea", "teacher", "girl"],
     answer: 1,
-    explain: { correct: "girl 的 /l/ 在元音后面，叫「Dark L」，舌尖顶上颚同时舌根后缩——是公认最难发的音之一", type: "Dark L（暗 L）" }
+    explain: { correct: "idea /aɪˈdɪə/ 没有 r 音，不需要卷舌——很多中国同学把 idea 读成 'idear'，加了多余的卷舌，这是典型的中式发音错误", type: "卷舌音 /r/（注意不能卷舌的单词）" }
   }
 ];
 
@@ -456,7 +442,7 @@ function buildProgress() {
 
 function renderQuestion() {
   const q = questions[currentQ];
-  document.getElementById('q-number').textContent = `第 ${q.id} / 10 题`;
+  document.getElementById('q-number').textContent = `第 ${q.id} / 8 题`;
   document.getElementById('q-text').innerHTML = q.text;
 
   const optsEl = document.getElementById('options');
@@ -510,7 +496,7 @@ function nextQuestion() {
 // ====== RESULTS ======
 function showResults() {
   const score = answers.filter(a => a.correct).length;
-  document.getElementById('result-score').textContent = `${score}/10`;
+  document.getElementById('result-score').textContent = `${score}/8`;
 
   let label = '';
   if (score >= 9) label = '🎯 发音大神！基础非常扎实';
