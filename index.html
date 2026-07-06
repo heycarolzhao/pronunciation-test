@@ -243,6 +243,54 @@ body {
 /* Hidden */
 .hidden { display: none !important; }
 
+/* Recording */
+.practice-sentences {
+  margin-bottom: 18px;
+}
+.practice-sentences .ps-item {
+  padding: 8px 12px;
+  margin-bottom: 6px;
+  background: #fdf8f4;
+  border-radius: 8px;
+  font-size: 14px;
+  color: #3d3226;
+  border-left: 3px solid #d4c5b0;
+}
+.ps-item .ps-num {
+  color: #a89279;
+  font-weight: 600;
+  margin-right: 8px;
+}
+.record-area { text-align: center; margin: 16px 0; }
+.btn-record {
+  width: 80px; height: 80px;
+  border-radius: 50%;
+  border: 3px solid #d48585;
+  background: #fff;
+  cursor: pointer;
+  transition: all 0.2s;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto;
+}
+.btn-record:hover { background: #fdf2f2; }
+.btn-record.recording {
+  border-color: #d48585;
+  background: #d48585;
+  animation: pulse 1.5s infinite;
+}
+.btn-record.recording .record-icon { color: #fff; }
+.btn-record.recording #record-label { color: #fff; }
+@keyframes pulse {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(212,133,133,0.4); }
+  50% { box-shadow: 0 0 0 12px rgba(212,133,133,0); }
+}
+.record-icon { font-size: 28px; }
+#record-label { font-size: 12px; color: #d48585; font-weight: 600; }
+.record-status { font-size: 13px; color: #8c7b6b; margin-top: 8px; }
+
 /* Footer */
 .footer {
   text-align: center;
@@ -271,6 +319,10 @@ body {
         做完你会看到自己的发音盲区，以及怎么改进。
       </p>
       <button class="btn btn-primary mt-16" onclick="startQuiz()">开始测试 →</button>
+      <div style="text-align:center;margin-top:16px;">
+        <p style="font-size:12px;color:#a89279;">📱 用手机做？扫码打开</p>
+        <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMgAAADIAQMAAACXljzdAAAABlBMVEX///8AAABVwtN+AAAACXBIWXMAAA7EAAAOxAGVKw4bAAABhElEQVRYhdWYO9KDMAyE5aFwyRE4im8WfDSO4iO4pMhY2ZVM5n9M6ggVjPFHwTqrBxH5GLsyuCoqC9fJdkYA8rAXTM/c+dC5HVhzKziBhrZjuR6S9ISq9FxV6x2InzyiidyHyHKuWnH9rzQmce/M8+fNH1d9kXg20teljsV8/StPY5IZi3ZoAPF68iNCEupp5FqsB7ZDcqOqDtU2IHj7rLhjva6+MWIT+BtHz3rNygcl0OO/QmDirkFuooZc3lmpLQKR3DemX78cIpRRY5NdzxWGQFU+ZFblt3fikgf22Ldzn5UaDqG7JTSBHtmqV2e/qvnYJJlr6J2is5yg8lFPZGLTBs4flW92GfJyzSHfJ1YxSlXjyYgEJ8xGKBF/PzcZOrFJj93zUL9oRUeiiQO7jPdt9hfMysGJi0izb1OJT/gSmvjs7/X63bE3+2QA4l96yEOeb24+0BW1OxA78Tl72rQx7kD4NaX+D4bOp0IT845lo9U/9zVVRWbubJzeKTZ5lBqbfIwXAE/VlgeAUCgAAAAASUVORK5CYII=" style="width:100px;height:100px;" alt="扫码测试">
+      </div>
     </div>
   </div>
 
@@ -296,7 +348,38 @@ body {
       <div class="result-label" id="result-label"></div>
       <div id="result-details"></div>
     </div>
-    <button class="btn btn-primary" onclick="showForm()">想修正这些发音问题 →</button>
+    <button class="btn btn-primary" onclick="showRecord()">🎙️ 实操练习：读出来试试 →</button>
+    <button class="btn btn-outline mt-16" onclick="showForm()">跳过，直接联系 Carol →</button>
+  </div>
+
+  <!-- ====== RECORD SCREEN ====== -->
+  <div id="screen-record" class="hidden">
+    <div class="header">
+      <div class="emoji">🎙️</div>
+      <h1>实操练习</h1>
+      <p class="subtitle">知道 ≠ 做到，读出来让我听听</p>
+    </div>
+    <div class="card">
+      <p style="font-size:13px;color:#8c7b6b;margin-bottom:14px;">
+        💡 下面是你的 8 句练习。<br>你可以一口气读完，也可以想读几句读几句。
+      </p>
+      <div class="practice-sentences" id="practice-sentences"></div>
+      <div class="record-area" id="record-area">
+        <button class="btn-record" id="btn-record" onclick="toggleRecord()">
+          <span class="record-icon">🎙️</span>
+          <span id="record-label">开始录音</span>
+        </button>
+        <p class="record-status" id="record-status"></p>
+      </div>
+      <div id="record-done" class="hidden" style="text-align:center;">
+        <p style="font-size:15px;color:#6b9b6b;font-weight:600;margin-bottom:10px;">✅ 录制完成！</p>
+        <a id="download-link" class="btn btn-outline" style="display:block;text-decoration:none;">📥 下载录音</a>
+        <div class="qr-note" style="margin-top:14px;">
+          📱 把录音发到 Carol 微信<br>24h 内给你专属反馈 ✨
+        </div>
+      </div>
+      <button class="btn btn-outline mt-16" onclick="showForm()">跳过，直接联系 Carol →</button>
+    </div>
   </div>
 
   <!-- ====== FORM SCREEN ====== -->
@@ -353,59 +436,59 @@ body {
 const questions = [
   {
     id: 1,
-    text: "下面哪一组单词的<strong>元音发音不同</strong>？",
-    options: ["ship / sheep", "cat / bat", "dog / frog", "meet / meat"],
-    answer: 0,
-    explain: { correct: "ship 是短元音 /ɪ/，sheep 是长元音 /iː/——长短音不分是中国人第一高频发音错误", type: "长元音 /iː/ vs 短元音 /ɪ/" }
+    text: "以下划线部分的发音，哪一个和其他三个不同？",
+    options: ["sh<u>i</u>p", "f<u>i</u>sh", "b<u>i</u>n", "sh<u>ee</u>p"],
+    answer: 3,
+    explain: { correct: "sheep 的下划线部分 ee 是长元音 /iː/，而 ship/fish/bin 的 i 都是短元音 /ɪ/——长短音不分是中国人第一高频发音错误。📖 练习句：There's a sheep on the ship.", type: "长元音 /iː/ vs 短元音 /ɪ/" }
   },
   {
     id: 2,
-    text: "下面哪个单词的<strong>辅音需要咬舌</strong>（舌尖放在上下齿之间）？",
-    options: ["six", "three", "say", "see"],
+    text: "以下划线部分的发音，哪一个和其他三个不同？",
+    options: ["<u>s</u>ix", "<u>th</u>ree", "<u>s</u>ay", "<u>s</u>ee"],
     answer: 1,
-    explain: { correct: "three 的 th 是咬舌音 /θ/——而 six/say/see 的 s 是 /s/ 音，中文里就有。很多同学直接用 s 代替咬舌 th", type: "咬舌音 /θ/ vs /s/" }
+    explain: { correct: "three 的下划线 th 是咬舌音 /θ/（舌尖放在上下齿之间），而 six/say/see 的 s 是 /s/ 音，中文里就有，不需要咬舌。📖 练习句：Six is not three.", type: "咬舌音 /θ/ vs /s/" }
   },
   {
     id: 3,
-    text: "以下哪一组单词的<strong>元音发音不同</strong>？",
-    options: ["time / right", "cat / sad", "light / cat", "like / bike"],
+    text: "以下划线部分的发音，哪一个和其他三个不同？",
+    options: ["t<u>i</u>me", "l<u>i</u>ght", "c<u>a</u>t", "r<u>i</u>ght"],
     answer: 2,
-    explain: { correct: "light 是双元音 /aɪ/（嘴巴从 /a/ 滑到 /ɪ/），cat 是单元音 /æ/（嘴巴张大不动）——双元音要滑动，很多同学读成一个音", type: "双元音 /aɪ/ vs 单元音 /æ/" }
+    explain: { correct: "cat 的下划线 a 是单元音 /æ/（嘴巴张大不动），而 time/light/right 的下划线 i 都是双元音 /aɪ/（嘴巴要从 /a/ 滑到 /ɪ/）——双元音要滑动，很多同学读成一个音。📖 练习句：The sad man sat on his bed and said goodbye.", type: "双元音 /aɪ/ vs 单元音 /æ/" }
   },
   {
     id: 4,
-    text: "下面哪个单词<strong>开头是 /v/ 音</strong>（上牙咬下唇），不是 /w/ 音（噘嘴）？",
-    options: ["very", "wine", "well", "water"],
+    text: "以下划线部分的发音，哪一个和其他三个不同？",
+    options: ["<u>v</u>ery", "<u>w</u>ine", "<u>w</u>ell", "<u>w</u>ater"],
     answer: 0,
-    explain: { correct: "very 开头是 /v/（上牙咬下唇），其他三个都是 /w/（噘嘴）——v/w 混淆是中式发音经典问题", type: "辅音 /v/ vs /w/" }
+    explain: { correct: "very 的下划线 v 是 /v/（上牙咬下唇），而 wine/well/water 的下划线 w 都是 /w/（噘嘴）——v/w 混淆是中式发音经典问题。📖 练习句：You're doing very well today.", type: "辅音 /v/ vs /w/" }
   },
   {
     id: 5,
-    text: "下面哪一个单词的<strong>结尾发音</strong>和其他三个不同？",
-    options: ["apple", "happy", "baby", "coffee"],
+    text: "以下划线部分的发音，哪一个和其他三个不同？",
+    options: ["app<u>le</u>", "pian<u>o</u>", "phot<u>o</u>", "hell<u>o</u>"],
     answer: 0,
-    explain: { correct: "apple 结尾是 Dark L /əl/——舌尖顶上颚的同时舌根要后缩，是公认最难发的音之一。而 happy/baby/coffee 结尾都是 /i/，舌尖不用额外动作", type: "Dark L（暗 L /əl/）" }
+    explain: { correct: "apple 的下划线 le 是 Dark L /əl/——舌尖顶上颚的同时舌根要后缩，是公认最难发的音之一。而 piano/photo/hello 的下划线 o 都是双元音 /əʊ/，舌尖不用后缩。📖 练习句：A little apple fell into the pool.", type: "Dark L" }
   },
   {
     id: 6,
-    text: "下面哪个单词<strong>不包含 /æ/ 音</strong>（嘴巴张大、像「哎」的音）？",
-    options: ["cat", "bad", "bed", "apple"],
+    text: "以下划线部分的发音，哪一个和其他三个不同？",
+    options: ["c<u>a</u>t", "b<u>a</u>d", "b<u>e</u>d", "<u>a</u>pple"],
     answer: 2,
-    explain: { correct: "bed 是 /e/（嘴巴小一点），cat/bad/apple 都是 /æ/（嘴巴张大）——/æ/ 中文里没有，很多同学发不准", type: "元音 /æ/ vs /e/" }
+    explain: { correct: "bed 的下划线 e 是 /e/（嘴巴小一点），而 cat/bad/apple 的下划线 a 都是 /æ/（嘴巴张大）——/æ/ 中文里没有，很多同学发不准。📖 练习句：The black bag is on the red bed.", type: "元音 /æ/ vs /e/" }
   },
   {
     id: 7,
-    text: "「Work 工作」的元音和下面哪个<strong>一样</strong>？",
-    options: ["hot 里的 /ɒ/", "bird 里的 /ɜː/", "walk 里的 /ɔː/", "car 里的 /ɑː/"],
-    answer: 1,
-    explain: { correct: "work 和 bird 都是长元音 /ɜː/——很多同学把 work 读成 walk（/ɔː/），意思完全不一样", type: "元音 /ɜː/ vs /ɔː/" }
+    text: "以下划线部分的发音，哪一个和其他三个不同？",
+    options: ["w<u>or</u>k", "g<u>ir</u>l", "w<u>al</u>k", "b<u>ir</u>d"],
+    answer: 2,
+    explain: { correct: "walk 的下划线 al 是 /ɔː/（嘴巴圆），而 work/girl/bird 的下划线 or/ir 都是 /ɜː/（嘴巴扁）——很多同学把 work 读成 walk，意思完全不一样。📖 练习句：Walk to work with the bird.", type: "元音 /ɜː/ vs /ɔː/" }
   },
   {
     id: 8,
-    text: "下面哪一个单词<strong>没有 /r/ 卷舌音</strong>？",
-    options: ["world", "idea", "teacher", "girl"],
+    text: "以下划线部分的发音，哪一个和其他三个不同？",
+    options: ["w<u>or</u>ld", "ide<u>a</u>", "teach<u>er</u>", "g<u>ir</u>l"],
     answer: 1,
-    explain: { correct: "idea /aɪˈdɪə/ 没有 r 音，不需要卷舌——很多中国同学把 idea 读成 'idear'，加了多余的卷舌，这是典型的中式发音错误", type: "卷舌音 /r/（注意不能卷舌的单词）" }
+    explain: { correct: "idea 的下划线 a 没有 r 音，不需要卷舌——而 world/teacher/girl 的下划线部分都含 /r/ 卷舌音。很多中国同学把 idea 读成 'idear'，加了多余的卷舌。📖 练习句：Eating a good breakfast — it's a great idea.", type: "卷舌音 /r/（注意不能卷舌的单词）" }
   }
 ];
 
@@ -519,12 +602,92 @@ function showResults() {
   } else {
     details = '<p style="font-size:14px;color:#8c7b6b;margin-bottom:12px;">你的发音盲区：</p>';
     for (const [type, count] of Object.entries(wrongTypes)) {
-      details += `<div class="blindspot"><span class="en">${type}</span><br><span class="why">错了 ${count} 题 — 这是中国学习者最常见的发音误区</span></div>`;
+      details += `<div class="blindspot"><span class="en">${type}</span></div>`;
     }
   }
 
   document.getElementById('result-details').innerHTML = details;
   show('screen-result');
+}
+
+// ====== PRACTICE SENTENCES ======
+const practiceSentences = [
+  "There's a sheep on the ship.",
+  "Six is not three.",
+  "The sad man sat on his bed and said goodbye.",
+  "You're doing very well today.",
+  "A little apple fell into the pool.",
+  "The black bag is on the red bed.",
+  "Walk to work with the bird.",
+  "Eating a good breakfast — it's a great idea."
+];
+
+// ====== RECORDING ======
+let mediaRecorder = null;
+let audioChunks = [];
+let audioBlob = null;
+
+function showRecord() {
+  const list = document.getElementById('practice-sentences');
+  list.innerHTML = practiceSentences.map((s, i) =>
+    `<div class="ps-item"><span class="ps-num">${i+1}</span>${s}</div>`
+  ).join('');
+
+  // Reset recording state
+  audioChunks = [];
+  audioBlob = null;
+  document.getElementById('record-area').classList.remove('hidden');
+  document.getElementById('record-done').classList.add('hidden');
+  document.getElementById('btn-record').classList.remove('recording');
+  document.getElementById('record-label').textContent = '开始录音';
+  document.getElementById('record-status').textContent = '';
+
+  show('screen-record');
+}
+
+async function toggleRecord() {
+  const btn = document.getElementById('btn-record');
+  const label = document.getElementById('record-label');
+  const status = document.getElementById('record-status');
+
+  if (mediaRecorder && mediaRecorder.state === 'recording') {
+    // Stop recording
+    mediaRecorder.stop();
+    btn.classList.remove('recording');
+    label.textContent = '开始录音';
+    status.textContent = '正在保存...';
+    return;
+  }
+
+  // Start recording
+  try {
+    const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+    mediaRecorder = new MediaRecorder(stream);
+    audioChunks = [];
+
+    mediaRecorder.ondataavailable = (e) => {
+      if (e.data.size > 0) audioChunks.push(e.data);
+    };
+
+    mediaRecorder.onstop = () => {
+      stream.getTracks().forEach(t => t.stop());
+      audioBlob = new Blob(audioChunks, { type: 'audio/webm' });
+      const url = URL.createObjectURL(audioBlob);
+      const link = document.getElementById('download-link');
+      link.href = url;
+      link.download = '我的发音练习.webm';
+      document.getElementById('record-area').classList.add('hidden');
+      document.getElementById('record-done').classList.remove('hidden');
+      status.textContent = '';
+    };
+
+    mediaRecorder.start();
+    btn.classList.add('recording');
+    label.textContent = '停止';
+    status.textContent = '🔴 正在录音...';
+  } catch (err) {
+    status.textContent = '⚠️ 无法访问麦克风，请在设置中允许';
+  }
 }
 
 // ====== FORM ======
