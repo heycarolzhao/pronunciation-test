@@ -375,6 +375,7 @@ body {
       </div>
       <div id="record-done" class="hidden" style="text-align:center;">
         <p style="font-size:15px;color:#6b9b6b;font-weight:600;margin-bottom:14px;">✅ 录制完成！</p>
+        <button id="retry-btn" class="btn btn-outline" style="display:block;width:100%;margin-bottom:8px;" onclick="retryRecord()">🔄 重新录制</button>
         <button id="share-btn" class="btn btn-primary" style="display:block;width:100%;">📤 先存到文件传输助手</button>
         <a id="download-link" class="btn btn-outline mt-16" style="display:block;text-decoration:none;">📥 备用：下载录音</a>
         <div style="margin-top:20px;padding:16px;background:#fdf6f0;border-radius:12px;text-align:center;">
@@ -724,6 +725,14 @@ async function toggleRecord() {
   } catch (err) {
     status.textContent = '⚠️ 无法访问麦克风，请在设置中允许';
   }
+}
+
+function retryRecord() {
+  audioBlob = null;
+  audioChunks = [];
+  document.getElementById('record-area').classList.remove('hidden');
+  document.getElementById('record-done').classList.add('hidden');
+  document.getElementById('record-status').textContent = '';
 }
 
 // ====== FORM ======
