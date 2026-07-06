@@ -663,7 +663,9 @@ async function toggleRecord() {
   // Start recording
   try {
     const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-    mediaRecorder = new MediaRecorder(stream);
+    const mimeType = MediaRecorder.isTypeSupported('audio/mp4') ? 'audio/mp4' : 'audio/webm';
+    const fileExt = mimeType === 'audio/mp4' ? 'm4a' : 'webm';
+    mediaRecorder = new MediaRecorder(stream, { mimeType });
     audioChunks = [];
 
     mediaRecorder.ondataavailable = (e) => {
@@ -672,17 +674,17 @@ async function toggleRecord() {
 
     mediaRecorder.onstop = () => {
       stream.getTracks().forEach(t => t.stop());
-      audioBlob = new Blob(audioChunks, { type: 'audio/webm' });
+      audioBlob = new Blob(audioChunks, { type: mimeType });
       const url = URL.createObjectURL(audioBlob);
 
       // Download link (backup)
       const link = document.getElementById('download-link');
       link.href = url;
-      link.download = '我的发音练习.webm';
+      link.download = '我的发音练习.' + fileExt;
 
       // Share button
       const shareBtn = document.getElementById('share-btn');
-      const file = new File([audioBlob], '我的发音练习.webm', { type: 'audio/webm' });
+      const file = new File([audioBlob], '我的发音练习.' + fileExt, { type: mimeType });
       if (navigator.canShare && navigator.canShare({ files: [file] })) {
         shareBtn.classList.remove('hidden');
         shareBtn.onclick = async () => {
