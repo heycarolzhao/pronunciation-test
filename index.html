@@ -1,0 +1,570 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>英语发音自测 — heycarolzhao</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  background: linear-gradient(135deg, #fdf6f0 0%, #f5ebe0 100%);
+  min-height: 100vh;
+  color: #3d3226;
+}
+
+.container {
+  max-width: 480px;
+  margin: 0 auto;
+  padding: 24px 20px;
+  min-height: 100vh;
+}
+
+/* Header */
+.header {
+  text-align: center;
+  padding: 40px 0 24px;
+}
+.header .emoji { font-size: 40px; }
+.header h1 {
+  font-size: 22px;
+  font-weight: 600;
+  margin: 12px 0 6px;
+  color: #2c2218;
+}
+.header .subtitle {
+  font-size: 14px;
+  color: #8c7b6b;
+}
+
+/* Cards */
+.card {
+  background: #fff;
+  border-radius: 16px;
+  padding: 28px 24px;
+  margin-bottom: 16px;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+}
+
+/* Progress */
+.progress-bar {
+  display: flex;
+  gap: 4px;
+  margin-bottom: 20px;
+}
+.progress-dot {
+  flex: 1; height: 4px;
+  background: #e8dcd0;
+  border-radius: 2px;
+  transition: background 0.3s;
+}
+.progress-dot.done { background: #c4a882; }
+.progress-dot.current { background: #8b6f4e; }
+
+/* Question */
+.q-number {
+  font-size: 12px;
+  color: #a89279;
+  font-weight: 500;
+  margin-bottom: 8px;
+}
+.q-text {
+  font-size: 17px;
+  font-weight: 500;
+  line-height: 1.5;
+  margin-bottom: 20px;
+}
+
+/* Options */
+.options { display: flex; flex-direction: column; gap: 10px; }
+.option {
+  display: flex;
+  align-items: center;
+  padding: 14px 16px;
+  border: 2px solid #ede4d8;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.2s;
+  background: #fefcf9;
+}
+.option:hover { border-color: #c4a882; background: #fdf6f0; }
+.option.selected {
+  border-color: #8b6f4e;
+  background: #f5ebe0;
+}
+.option.correct {
+  border-color: #6b9b6b;
+  background: #f0f7f0;
+}
+.option.wrong {
+  border-color: #d48585;
+  background: #fdf2f2;
+}
+.option-letter {
+  width: 28px; height: 28px;
+  border-radius: 50%;
+  background: #f5ebe0;
+  text-align: center; line-height: 28px;
+  font-size: 13px; font-weight: 600;
+  color: #8b6f4e;
+  margin-right: 12px;
+  flex-shrink: 0;
+}
+.option.selected .option-letter { background: #8b6f4e; color: #fff; }
+.option-text { font-size: 15px; }
+
+/* Buttons */
+.btn {
+  display: block;
+  width: 100%;
+  padding: 14px;
+  border: none;
+  border-radius: 12px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+  text-align: center;
+}
+.btn-primary {
+  background: #8b6f4e;
+  color: #fff;
+}
+.btn-primary:hover { background: #7a5f40; }
+.btn-primary:disabled {
+  background: #ccc;
+  cursor: not-allowed;
+}
+.btn-outline {
+  background: transparent;
+  border: 2px solid #8b6f4e;
+  color: #8b6f4e;
+}
+.btn-outline:hover { background: #f5ebe0; }
+.mt-16 { margin-top: 16px; }
+
+/* Results */
+.result-score {
+  text-align: center;
+  font-size: 48px;
+  font-weight: 700;
+  color: #8b6f4e;
+  margin: 16px 0 4px;
+}
+.result-label {
+  text-align: center;
+  font-size: 14px;
+  color: #8c7b6b;
+  margin-bottom: 20px;
+}
+.blindspot {
+  padding: 10px 14px;
+  border-left: 3px solid #d48585;
+  margin-bottom: 8px;
+  font-size: 14px;
+  background: #fdf8f4;
+  border-radius: 0 8px 8px 0;
+}
+.blindspot .en { font-weight: 600; color: #8b6f4e; }
+.blindspot .why { color: #8c7b6b; font-size: 13px; }
+.strength {
+  padding: 10px 14px;
+  border-left: 3px solid #6b9b6b;
+  margin-bottom: 8px;
+  font-size: 14px;
+  background: #f4faf4;
+  border-radius: 0 8px 8px 0;
+}
+
+/* Form */
+.form-group { margin-bottom: 16px; }
+.form-label {
+  display: block;
+  font-size: 13px;
+  font-weight: 600;
+  color: #8c7b6b;
+  margin-bottom: 6px;
+}
+.form-input, .form-select {
+  width: 100%;
+  padding: 12px 14px;
+  border: 2px solid #ede4d8;
+  border-radius: 10px;
+  font-size: 15px;
+  font-family: inherit;
+  background: #fefcf9;
+  transition: border-color 0.2s;
+}
+.form-input:focus, .form-select:focus {
+  outline: none;
+  border-color: #8b6f4e;
+}
+.form-select {
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%238c7b6b' stroke-width='2' fill='none'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 14px center;
+  padding-right: 40px;
+}
+
+/* QR Reveal */
+.qr-section { text-align: center; }
+.qr-section h3 {
+  font-size: 18px;
+  margin-bottom: 4px;
+}
+.qr-section .qr-sub {
+  font-size: 14px; color: #8c7b6b;
+  margin-bottom: 16px;
+}
+.qr-placeholder {
+  width: 180px; height: 180px;
+  margin: 0 auto;
+  border: 3px dashed #d4c5b0;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #a89279;
+  font-size: 13px;
+  background: #fdf8f4;
+}
+.qr-note {
+  font-size: 14px;
+  color: #8b6f4e;
+  font-weight: 500;
+  margin-top: 12px;
+  padding: 10px;
+  background: #fdf6f0;
+  border-radius: 8px;
+}
+
+/* Hidden */
+.hidden { display: none !important; }
+
+/* Footer */
+.footer {
+  text-align: center;
+  padding: 24px 0;
+  font-size: 12px;
+  color: #bfb19f;
+}
+</style>
+</head>
+<body>
+
+<div class="container">
+
+  <!-- ====== START SCREEN ====== -->
+  <div id="screen-start">
+    <div class="header">
+      <div class="emoji">🗣️</div>
+      <h1>你的发音盲区在哪里？</h1>
+      <p class="subtitle">10 道题 · 5 分钟 · 找到中国人最容易发错的音</p>
+    </div>
+    <div class="card">
+      <p style="font-size: 14px; color: #8c7b6b; line-height: 1.7;">
+        👋 嗨，我是 Carol，专注英语发音 3 年+<br><br>
+        这个小测试不考听力、不考语法，只测一个东西——<br>
+        <strong>你对英语发音的感觉。</strong><br><br>
+        做完你会看到自己的发音盲区，以及怎么改进。
+      </p>
+      <button class="btn btn-primary mt-16" onclick="startQuiz()">开始测试 →</button>
+    </div>
+  </div>
+
+  <!-- ====== QUIZ SCREEN ====== -->
+  <div id="screen-quiz" class="hidden">
+    <div class="progress-bar" id="progress-bar"></div>
+    <div class="card">
+      <div class="q-number" id="q-number"></div>
+      <div class="q-text" id="q-text"></div>
+      <div class="options" id="options"></div>
+      <button class="btn btn-primary mt-16" id="btn-next" disabled onclick="nextQuestion()">下一题 →</button>
+    </div>
+  </div>
+
+  <!-- ====== RESULT SCREEN ====== -->
+  <div id="screen-result" class="hidden">
+    <div class="header">
+      <div class="emoji">📊</div>
+      <h1>你的发音诊断报告</h1>
+    </div>
+    <div class="card">
+      <div class="result-score" id="result-score"></div>
+      <div class="result-label" id="result-label"></div>
+      <div id="result-details"></div>
+    </div>
+    <button class="btn btn-primary" onclick="showForm()">想修正这些发音问题 →</button>
+  </div>
+
+  <!-- ====== FORM SCREEN ====== -->
+  <div id="screen-form" class="hidden">
+    <div class="header">
+      <div class="emoji">💌</div>
+      <h1>就差一步</h1>
+    </div>
+    <div class="card">
+      <div class="form-group">
+        <label class="form-label">你的昵称</label>
+        <input class="form-input" id="input-nickname" placeholder="怎么称呼你？" maxlength="20">
+      </div>
+      <div class="form-group">
+        <label class="form-label">你学英语的目标是？</label>
+        <select class="form-select" id="input-goal">
+          <option value="">选一个吧 👇</option>
+          <option>考试备考</option>
+          <option>工作沟通</option>
+          <option>日常交流</option>
+          <option>就想说得好听 ✨</option>
+        </select>
+      </div>
+      <button class="btn btn-primary mt-16" id="btn-reveal" onclick="revealQR()">获取我的发音修正建议 →</button>
+    </div>
+  </div>
+
+  <!-- ====== QR SCREEN ====== -->
+  <div id="screen-qr" class="hidden">
+    <div class="header">
+      <div class="emoji">🎉</div>
+      <h1>来链接我吧</h1>
+    </div>
+    <div class="card qr-section">
+      <h3>扫码加 Carol</h3>
+      <p class="qr-sub">备注「发音自测」我就能认出你</p>
+      <div class="qr-placeholder" id="qr-img">
+        <!-- 替换成你的微信二维码图片 -->
+        [ 微信二维码 ]<br>放这里
+      </div>
+      <div class="qr-note" style="margin-top:16px;">
+        📱 扫码加好友，备注：<strong>发音自测</strong>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <div class="footer">heycarolzhao.github.io</div>
+
+</div>
+
+<script>
+// ====== QUIZ DATA ======
+const questions = [
+  {
+    id: 1,
+    text: "下面哪一组单词的<strong>元音发音不同</strong>？",
+    options: ["ship / sheep", "cat / bat", "dog / frog", "meet / meat"],
+    answer: 0,
+    explain: { correct: "ship 是短元音 /ɪ/，sheep 是长元音 /iː/——长短音不分是中国人第一高频发音错误", type: "长元音 vs 短元音" }
+  },
+  {
+    id: 2,
+    text: "下面哪个单词里的「th」发音<strong>和其他三个不同</strong>？",
+    options: ["think", "three", "this", "thank"],
+    answer: 2,
+    explain: { correct: "this 的 th 是浊辅音 /ð/（声带震动），其他三个都是清辅音 /θ/（声带不震）", type: "清辅音 vs 浊辅音" }
+  },
+  {
+    id: 3,
+    text: "以下哪一组的<strong>元音发音不同</strong>？",
+    options: ["full / fool", "sun / fun", "bit / fit", "see / fee"],
+    answer: 0,
+    explain: { correct: "full 是 /ʊ/（短），fool 是 /uː/（长）——这也是典型的长短音盲区", type: "长元音 vs 短元音" }
+  },
+  {
+    id: 4,
+    text: "下面哪个单词<strong>开头是 /v/ 音</strong>（上牙咬下唇），不是 /w/ 音（噘嘴）？",
+    options: ["very", "wine", "well", "water"],
+    answer: 0,
+    explain: { correct: "very 开头是 /v/（上牙咬下唇），其他三个都是 /w/（噘嘴）——v/w 混淆是中式发音经典问题", type: "辅音 /v/ vs /w/" }
+  },
+  {
+    id: 5,
+    text: "「Light 光」和「Night 夜晚」，<strong>开头辅音一样吗</strong>？",
+    options: ["一样，都是 L", "不一样，L 和 N 不同", "英文里 L 和 N 可以替换", "取决于口音"],
+    answer: 1,
+    explain: { correct: "L 舌尖顶上颚 / N 舌尖顶上颚+鼻子出气——很多同学会混淆 light 和 night", type: "辅音 /l/ vs /n/" }
+  },
+  {
+    id: 6,
+    text: "「Rice 米饭」的结尾辅音是哪一个？",
+    options: ["/s/（清辅音，像「嘶」）", "/z/（浊辅音，像「滋」）", "/ʃ/（像「嘘」）", "/tʃ/（像「吃」）"],
+    answer: 0,
+    explain: { correct: "rice 以清辅音 /s/ 结尾——而 rise 以浊辅音 /z/ 结尾，它们是不同的单词！", type: "清辅音 vs 浊辅音" }
+  },
+  {
+    id: 7,
+    text: "下面哪个单词<strong>不包含 /æ/ 音</strong>（嘴巴张大、像「哎」的音）？",
+    options: ["cat", "bad", "bed", "apple"],
+    answer: 2,
+    explain: { correct: "bed 是 /e/（嘴巴小一点），cat/bad/apple 都是 /æ/（嘴巴张大）——/æ/ 中文里没有，很多同学发不准", type: "元音 /æ/ vs /e/" }
+  },
+  {
+    id: 8,
+    text: "「Work 工作」的元音和下面哪个<strong>一样</strong>？",
+    options: ["hot 里的 /ɒ/", "bird 里的 /ɜː/", "walk 里的 /ɔː/", "car 里的 /ɑː/"],
+    answer: 1,
+    explain: { correct: "work 和 bird 都是长元音 /ɜː/——很多同学把 work 读成 walk（/ɔː/），意思完全不一样", type: "元音 /ɜː/ vs /ɔː/" }
+  },
+  {
+    id: 9,
+    text: "「Host 主人」和「Most 大多数」，<strong>押韵吗</strong>？",
+    options: ["押韵", "不押韵，host 更短", "不押韵，most 更短", "英语里没有押韵这个说法"],
+    answer: 0,
+    explain: { correct: "host 和 most 都押 /əʊst/ 韵——但很多同学把 host 读成 '后斯特'（加了多余的音）", type: "双元音 /əʊ/" }
+  },
+  {
+    id: 10,
+    text: "下面哪个单词的<strong>结尾 L 最难发</strong>（称为「Dark L」）？",
+    options: ["light", "girl", "love", "like"],
+    answer: 1,
+    explain: { correct: "girl 的 /l/ 在元音后面，叫「Dark L」，舌尖顶上颚同时舌根后缩——是公认最难发的音之一", type: "Dark L（暗 L）" }
+  }
+];
+
+// ====== STATE ======
+let currentQ = 0;
+let selectedAnswer = null;
+let answers = []; // { correct: bool, type: string, detail: string }
+
+// ====== SCREEN CONTROL ======
+function show(screenId) {
+  document.querySelectorAll('[id^="screen-"]').forEach(el => el.classList.add('hidden'));
+  document.getElementById(screenId).classList.remove('hidden');
+}
+
+// ====== START ======
+function startQuiz() {
+  currentQ = 0;
+  selectedAnswer = null;
+  answers = [];
+  show('screen-quiz');
+  buildProgress();
+  renderQuestion();
+}
+
+function buildProgress() {
+  const bar = document.getElementById('progress-bar');
+  bar.innerHTML = questions.map((_, i) => {
+    let cls = '';
+    if (i < currentQ) cls = 'done';
+    else if (i === currentQ) cls = 'current';
+    return `<div class="progress-dot ${cls}"></div>`;
+  }).join('');
+}
+
+function renderQuestion() {
+  const q = questions[currentQ];
+  document.getElementById('q-number').textContent = `第 ${q.id} / 10 题`;
+  document.getElementById('q-text').innerHTML = q.text;
+
+  const optsEl = document.getElementById('options');
+  optsEl.innerHTML = q.options.map((opt, i) => `
+    <div class="option" data-index="${i}" onclick="selectOption(${i})">
+      <div class="option-letter">${'ABCD'[i]}</div>
+      <div class="option-text">${opt}</div>
+    </div>
+  `).join('');
+
+  selectedAnswer = null;
+  document.getElementById('btn-next').disabled = true;
+  document.getElementById('btn-next').textContent = currentQ < questions.length - 1 ? '下一题 →' : '查看结果 →';
+}
+
+function selectOption(index) {
+  if (selectedAnswer !== null) return; // already answered
+  selectedAnswer = index;
+
+  const q = questions[currentQ];
+  const opts = document.querySelectorAll('#options .option');
+  
+  opts.forEach((opt, i) => {
+    opt.classList.remove('selected');
+    if (i === q.answer) opt.classList.add('correct');
+    if (i === index && i !== q.answer) opt.classList.add('wrong');
+  });
+  opts[index].classList.add('selected');
+
+  const isCorrect = index === q.answer;
+  answers.push({
+    correct: isCorrect,
+    type: q.explain.type,
+    detail: isCorrect ? '' : q.explain.correct
+  });
+
+  document.getElementById('btn-next').disabled = false;
+}
+
+function nextQuestion() {
+  if (currentQ < questions.length - 1) {
+    currentQ++;
+    selectedAnswer = null;
+    buildProgress();
+    renderQuestion();
+  } else {
+    showResults();
+  }
+}
+
+// ====== RESULTS ======
+function showResults() {
+  const score = answers.filter(a => a.correct).length;
+  document.getElementById('result-score').textContent = `${score}/10`;
+
+  let label = '';
+  if (score >= 9) label = '🎯 发音大神！基础非常扎实';
+  else if (score >= 6) label = '👍 不错，但有几个发音盲区要关注';
+  else if (score >= 4) label = '🔍 有提升空间，试试下面的建议';
+  else label = '🌱 刚开始，现在补起来刚刚好！';
+  document.getElementById('result-label').textContent = label;
+
+  // Collect wrong answers grouped by type
+  const wrongTypes = {};
+  answers.forEach(a => {
+    if (!a.correct) {
+      wrongTypes[a.type] = (wrongTypes[a.type] || 0) + 1;
+    }
+  });
+
+  let details = '';
+  if (Object.keys(wrongTypes).length === 0) {
+    details = '<div class="strength"><strong>🎉 全部答对！</strong> 你对发音的感觉非常敏锐</div>';
+  } else {
+    details = '<p style="font-size:14px;color:#8c7b6b;margin-bottom:12px;">你的发音盲区：</p>';
+    for (const [type, count] of Object.entries(wrongTypes)) {
+      details += `<div class="blindspot"><span class="en">${type}</span><br><span class="why">错了 ${count} 题 — 这是中国学习者最常见的发音误区</span></div>`;
+    }
+  }
+
+  document.getElementById('result-details').innerHTML = details;
+  show('screen-result');
+}
+
+// ====== FORM ======
+function showForm() {
+  show('screen-form');
+}
+
+function revealQR() {
+  const nick = document.getElementById('input-nickname').value.trim();
+  const goal = document.getElementById('input-goal').value;
+  
+  if (!nick) {
+    alert('先告诉我你的昵称呀～');
+    return;
+  }
+  if (!goal) {
+    alert('选一个学英语的目标吧～');
+    return;
+  }
+
+  // Store info locally (optional)
+  console.log('User:', { nick, goal });
+
+  show('screen-qr');
+}
+</script>
+
+</body>
+</html>
