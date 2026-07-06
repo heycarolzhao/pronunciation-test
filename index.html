@@ -373,9 +373,10 @@ body {
       </div>
       <div id="record-done" class="hidden" style="text-align:center;">
         <p style="font-size:15px;color:#6b9b6b;font-weight:600;margin-bottom:10px;">✅ 录制完成！</p>
-        <a id="download-link" class="btn btn-outline" style="display:block;text-decoration:none;">📥 下载录音</a>
+        <button id="share-btn" class="btn btn-primary" style="display:block;width:100%;">📤 分享录音到微信</button>
+        <a id="download-link" class="btn btn-outline mt-16" style="display:block;text-decoration:none;">📥 备用：下载录音</a>
         <div class="qr-note" style="margin-top:14px;">
-          📱 把录音发到 Carol 微信<br>24h 内给你专属反馈 ✨
+          📱 发给 Carol 微信<br>备注「发音自测」，24h内给你反馈 ✨
         </div>
       </div>
       <button class="btn btn-outline mt-16" onclick="showForm()">跳过，直接联系 Carol →</button>
@@ -673,9 +674,32 @@ async function toggleRecord() {
       stream.getTracks().forEach(t => t.stop());
       audioBlob = new Blob(audioChunks, { type: 'audio/webm' });
       const url = URL.createObjectURL(audioBlob);
+
+      // Download link (backup)
       const link = document.getElementById('download-link');
       link.href = url;
       link.download = '我的发音练习.webm';
+
+      // Share button
+      const shareBtn = document.getElementById('share-btn');
+      const file = new File([audioBlob], '我的发音练习.webm', { type: 'audio/webm' });
+      if (navigator.canShare && navigator.canShare({ files: [file] })) {
+        shareBtn.classList.remove('hidden');
+        shareBtn.onclick = async () => {
+          try {
+            await navigator.share({
+              files: [file],
+              title: '发音练习录音',
+              text: '这是我的发音练习，请帮我听听～'
+            });
+          } catch (e) {
+            // User cancelled, ignore
+          }
+        };
+      } else {
+        shareBtn.classList.add('hidden');
+      }
+
       document.getElementById('record-area').classList.add('hidden');
       document.getElementById('record-done').classList.remove('hidden');
       status.textContent = '';
