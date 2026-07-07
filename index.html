@@ -326,10 +326,6 @@ body {
         做完你会看到自己的发音盲区，以及怎么改进。
       </p>
       <button class="btn btn-primary mt-16" onclick="startQuiz()">开始测试 →</button>
-      <div style="text-align:center;margin-top:16px;">
-        <p style="font-size:12px;color:#a89279;">📱 用手机做？微信扫二维码打开</p>
-        <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMgAAADIAQMAAACXljzdAAAABlBMVEX///8AAABVwtN+AAAACXBIWXMAAA7EAAAOxAGVKw4bAAABhElEQVRYhdWYO9KDMAyE5aFwyRE4im8WfDSO4iO4pMhY2ZVM5n9M6ggVjPFHwTqrBxH5GLsyuCoqC9fJdkYA8rAXTM/c+dC5HVhzKziBhrZjuR6S9ISq9FxV6x2InzyiidyHyHKuWnH9rzQmce/M8+fNH1d9kXg20teljsV8/StPY5IZi3ZoAPF68iNCEupp5FqsB7ZDcqOqDtU2IHj7rLhjva6+MWIT+BtHz3rNygcl0OO/QmDirkFuooZc3lmpLQKR3DemX78cIpRRY5NdzxWGQFU+ZFblt3fikgf22Ldzn5UaDqG7JTSBHtmqV2e/qvnYJJlr6J2is5yg8lFPZGLTBs4flW92GfJyzSHfJ1YxSlXjyYgEJ8xGKBF/PzcZOrFJj93zUL9oRUeiiQO7jPdt9hfMysGJi0izb1OJT/gSmvjs7/X63bE3+2QA4l96yEOeb24+0BW1OxA78Tl72rQx7kD4NaX+D4bOp0IT845lo9U/9zVVRWbubJzeKTZ5lBqbfIwXAE/VlgeAUCgAAAAASUVORK5CYII=" style="width:100px;height:100px;" alt="扫码测试">
-      </div>
     </div>
   </div>
 
@@ -356,7 +352,6 @@ body {
       <div id="result-details"></div>
     </div>
     <button class="btn btn-primary" onclick="showRecord()">🎙️ 实操练习：读出来试试 →</button>
-    <button class="btn btn-outline mt-16" onclick="showForm()">跳过，直接联系 Carol →</button>
   </div>
 
   <!-- ====== RECORD SCREEN ====== -->
@@ -379,14 +374,14 @@ body {
         <p class="record-status" id="record-status"></p>
       </div>
       <div id="record-done" class="hidden" style="text-align:center;">
-        <p style="font-size:15px;color:#6b9b6b;font-weight:600;margin-bottom:10px;">✅ 录制完成！</p>
-        <button id="share-btn" class="btn btn-primary" style="display:block;width:100%;">📤 分享录音到微信</button>
-        <a id="download-link" class="btn btn-outline mt-16" style="display:block;text-decoration:none;">📥 备用：下载录音</a>
-        <div class="qr-note" style="margin-top:14px;">
-          📱 发给 Carol 微信<br>备注「发音自测」，24h内给你反馈 ✨
+        <p style="font-size:15px;color:#6b9b6b;font-weight:600;margin-bottom:14px;">✅ 录制完成！</p>
+        <button id="retry-btn" class="btn btn-outline" style="display:block;width:100%;margin-bottom:8px;" onclick="retryRecord()">🔄 重新录制</button>
+        <button id="share-btn" class="btn btn-primary" style="display:block;width:100%;">📤 分享录音</button>
+        <a id="download-link" class="btn btn-outline mt-16 hidden" style="display:block;text-decoration:none;">💻 电脑端：下载录音</a>
+        <div style="margin-top:16px;text-align:center;">
+          <p id="share-hint" style="font-size:14px;color:#8c7b6b;margin:0;">💬 录音直接微信发我就行～</p>
         </div>
       </div>
-      <button class="btn btn-outline mt-16" onclick="showForm()">跳过，直接联系 Carol →</button>
     </div>
   </div>
 
@@ -690,10 +685,21 @@ async function toggleRecord() {
       audioBlob = new Blob(audioChunks, { type: mimeType });
       const url = URL.createObjectURL(audioBlob);
 
-      // Download link (backup)
-      const link = document.getElementById('download-link');
-      link.href = url;
-      link.download = '我的发音练习.' + fileExt;
+      // Download fallback (desktop)
+      const downloadLink = document.getElementById('download-link');
+      downloadLink.href = url;
+      downloadLink.download = '我的发音练习.' + fileExt;
+
+      // Mobile detection
+      const isMobile = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
+      const hint = document.getElementById('share-hint');
+      if (isMobile) {
+        downloadLink.classList.add('hidden');
+        hint.textContent = '💬 录音直接微信发我就行～';
+      } else {
+        downloadLink.classList.remove('hidden');
+        hint.textContent = '💻 电脑端微信不支持直接分享，下载录音后拖到微信发给 Carol';
+      }
 
       // Share button
       const shareBtn = document.getElementById('share-btn');
@@ -727,6 +733,14 @@ async function toggleRecord() {
   } catch (err) {
     status.textContent = '⚠️ 无法访问麦克风，请在设置中允许';
   }
+}
+
+function retryRecord() {
+  audioBlob = null;
+  audioChunks = [];
+  document.getElementById('record-area').classList.remove('hidden');
+  document.getElementById('record-done').classList.add('hidden');
+  document.getElementById('record-status').textContent = '';
 }
 
 // ====== FORM ======
