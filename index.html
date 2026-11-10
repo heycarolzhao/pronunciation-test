@@ -1,1021 +1,354 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="zh-CN">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>英语发音自测 — heycarolzhao</title>
-<style>
-* { margin: 0; padding: 0; box-sizing: border-box; }
-
-body {
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-  background: linear-gradient(135deg, #fdf6f0 0%, #f5ebe0 100%);
-  min-height: 100vh;
-  color: #3d3226;
-  -webkit-tap-highlight-color: transparent;
-}
-
-.container {
-  max-width: 480px;
-  margin: 0 auto;
-  padding: 24px 20px;
-  min-height: 100vh;
-}
-
-.header { text-align: center; padding: 40px 0 24px; }
-.header h1 {
-  font-size: 22px; font-weight: 600;
-  margin: 0 0 6px; color: #2c2218;
-}
-.header .subtitle { font-size: 14px; color: #8c7b6b; }
-
-.card {
-  background: #fff;
-  border-radius: 16px;
-  padding: 28px 24px;
-  margin-bottom: 16px;
-  box-shadow: 0 2px 12px rgba(0,0,0,0.06);
-}
-
-.tip-bar {
-  background: #fff8ed;
-  border: 1px solid #f0d9b6;
-  border-radius: 12px;
-  padding: 12px 14px;
-  margin-bottom: 16px;
-  display: flex; align-items: flex-start; gap: 10px;
-}
-.tip-bar .tip-badge {
-  width: 22px; height: 22px; border-radius: 50%;
-  background: #f0d9b6; color: #8b6f4e;
-  font-size: 13px; font-weight: 700;
-  text-align: center; line-height: 22px; flex-shrink: 0;
-}
-.tip-bar .tip-text { font-size: 13px; color: #8b6f4e; line-height: 1.5; }
-.tip-bar .tip-action {
-  background: none; border: none; color: #8b6f4e;
-  font-size: 13px; font-weight: 600; cursor: pointer;
-  padding: 0 0 0 4px; white-space: nowrap;
-}
-.tip-bar.green { background: #f0f7f0; border-color: #b8d6b8; }
-.tip-bar.green .tip-badge { background: #b8d6b8; color: #4a7a4a; }
-.tip-bar.green .tip-text, .tip-bar.green .tip-action { color: #4a7a4a; }
-
-.progress-bar { display: flex; gap: 4px; margin-bottom: 20px; }
-.progress-dot {
-  flex: 1; height: 4px; background: #e8dcd0;
-  border-radius: 2px; transition: background 0.3s;
-}
-.progress-dot.done { background: #c4a882; }
-.progress-dot.current { background: #8b6f4e; }
-
-.q-number { font-size: 12px; color: #a89279; font-weight: 500; margin-bottom: 8px; }
-.q-text { font-size: 17px; font-weight: 500; line-height: 1.5; margin-bottom: 20px; }
-
-.options { display: flex; flex-direction: column; gap: 10px; }
-.option {
-  display: flex; align-items: center; padding: 14px 16px;
-  border: 2px solid #ede4d8; border-radius: 12px;
-  cursor: pointer; transition: all 0.2s; background: #fefcf9;
-}
-.option:hover { border-color: #c4a882; background: #fdf6f0; }
-.option.correct { border-color: #6b9b6b; background: #f0f7f0; }
-.option.wrong { border-color: #d48585; background: #fdf2f2; }
-.option.disabled { pointer-events: none; }
-.option-letter {
-  width: 28px; height: 28px; border-radius: 50%;
-  background: #f5ebe0; text-align: center; line-height: 28px;
-  font-size: 13px; font-weight: 600; color: #8b6f4e;
-  margin-right: 12px; flex-shrink: 0;
-}
-.option.correct .option-letter { background: #6b9b6b; color: #fff; }
-.option.wrong .option-letter { background: #d48585; color: #fff; }
-.option-text { font-size: 15px; }
-
-.explanation {
-  margin-top: 16px; padding: 16px;
-  border-radius: 12px; background: #fdf8f4;
-  border-left: 3px solid #c4a882;
-}
-.explanation-title { font-size: 13px; font-weight: 600; color: #8b6f4e; margin-bottom: 8px; }
-.explanation-body { font-size: 14px; color: #3d3226; line-height: 1.7; }
-.explanation-body .practice {
-  display: block; margin-top: 10px; padding: 10px 12px;
-  background: #fff; border-radius: 8px; color: #5f4e3f;
-}
-
-/* Read-aloud (record) area */
-.read-aloud {
-  margin-top: 14px; padding: 14px;
-  background: #faf6f1; border-radius: 12px;
-  border: 1px dashed #e0d2c0;
-}
-.read-aloud-title {
-  font-size: 13px; font-weight: 600; color: #8b6f4e; margin-bottom: 10px;
-}
-.read-aloud-words {
-  font-size: 15px; color: #3d3226; line-height: 1.8;
-  margin-bottom: 12px; padding: 10px 12px;
-  background: #fff; border-radius: 8px; text-align: center;
-  letter-spacing: 0.3px;
-}
-.recording-box {
-  display: flex; align-items: center; justify-content: center;
-  gap: 12px; padding: 12px;
-  background: #fdf2f2; border-radius: 10px;
-  border: 1px solid #f0c9c9;
-}
-.rec-dot {
-  width: 10px; height: 10px; border-radius: 50%;
-  background: #d48585; animation: blink 1s infinite;
-}
-@keyframes blink { 0%,100% { opacity: 1; } 50% { opacity: 0.25; } }
-.timer { font-size: 18px; font-weight: 600; color: #c46b6b; font-variant-numeric: tabular-nums; }
-.record-done-box { text-align: center; }
-.record-done-box audio { width: 100%; margin-bottom: 10px; }
-.record-actions { display: flex; gap: 8px; }
-.record-actions button { flex: 1; }
-.wechat-record { text-align: center; }
-.wechat-record p { font-size: 13px; color: #8c7b6b; line-height: 1.6; margin-bottom: 10px; }
-.copy-ok { font-size: 13px; color: #6b9b6b; font-weight: 600; margin-top: 8px; }
-
-/* Buttons */
-.btn {
-  display: block; width: 100%; padding: 14px;
-  border: none; border-radius: 12px;
-  font-size: 16px; font-weight: 600; cursor: pointer;
-  transition: all 0.2s; text-align: center; font-family: inherit;
-}
-.btn-primary { background: #8b6f4e; color: #fff; }
-.btn-primary:hover { background: #7a5f40; }
-.btn-primary:disabled { background: #ccc; cursor: not-allowed; }
-.btn-secondary { background: #fff; border: 2px solid #8b6f4e; color: #8b6f4e; }
-.btn-secondary:hover { background: #f5ebe0; }
-.btn-text {
-  background: transparent; color: #8b6f4e;
-  text-decoration: underline; text-underline-offset: 3px;
-  font-size: 14px; padding: 10px;
-}
-.btn-small {
-  padding: 9px 12px; border-radius: 8px; font-size: 14px;
-  font-weight: 500; cursor: pointer; font-family: inherit;
-  background: #fff; border: 1px solid #d4c5b0; color: #8b6f4e;
-}
-.btn-small:hover { background: #f5ebe0; }
-.mt-12 { margin-top: 12px; }
-.mt-16 { margin-top: 16px; }
-.action-row { display: flex; flex-direction: column; gap: 10px; }
-
-/* Results */
-.result-score {
-  text-align: center; font-size: 48px; font-weight: 700;
-  color: #8b6f4e; margin: 16px 0 4px;
-}
-.result-label { text-align: center; font-size: 14px; color: #8c7b6b; margin-bottom: 20px; }
-.blindspot-group { margin-bottom: 16px; }
-.blindspot-title { font-size: 14px; font-weight: 600; color: #8b6f4e; margin-bottom: 6px; }
-.blindspot-text {
-  font-size: 13px; color: #3d3226; line-height: 1.6;
-  padding: 12px; background: #fdf8f4; border-radius: 8px;
-}
-.blindspot-text .practice { display: block; margin-top: 8px; color: #5f4e3f; }
-.strength-summary {
-  padding: 14px; border-radius: 8px; background: #f4faf4;
-  border-left: 3px solid #6b9b6b; font-size: 14px;
-  color: #3d3226; margin-bottom: 16px;
-}
-.section-title { font-size: 13px; font-weight: 600; color: #8c7b6b; margin-bottom: 12px; }
-
-.practice-sentences { margin-bottom: 18px; }
-.ps-item {
-  padding: 10px 12px; margin-bottom: 8px; background: #fdf8f4;
-  border-radius: 8px; font-size: 14px; color: #3d3226;
-  border-left: 3px solid #d4c5b0;
-}
-.ps-item .ps-num { color: #a89279; font-weight: 600; margin-right: 8px; }
-
-/* Recording summary */
-.audio-item {
-  padding: 12px; margin-bottom: 12px; background: #faf6f1;
-  border-radius: 10px; border-left: 3px solid #c4a882;
-}
-.audio-meta {
-  display: flex; justify-content: space-between; align-items: center;
-  margin-bottom: 8px; gap: 8px;
-}
-.audio-label { font-size: 13px; font-weight: 600; color: #5f4e3f; flex: 1; }
-.audio-tag {
-  font-size: 11px; padding: 3px 8px; border-radius: 20px;
-  background: #e8f0e8; color: #4a7a4a; white-space: nowrap;
-}
-.audio-tag.wrong { background: #fbeaea; color: #a85050; }
-.audio-item audio { width: 100%; }
-.empty-note {
-  text-align: center; padding: 20px; color: #8c7b6b; font-size: 14px;
-}
-
-/* Form */
-.form-group { margin-bottom: 16px; }
-.form-label {
-  display: block; font-size: 13px; font-weight: 600;
-  color: #8c7b6b; margin-bottom: 6px;
-}
-.form-input, .form-select {
-  width: 100%; padding: 12px 14px; border: 2px solid #ede4d8;
-  border-radius: 10px; font-size: 15px; font-family: inherit;
-  background: #fefcf9; transition: border-color 0.2s;
-}
-.form-input:focus, .form-select:focus { outline: none; border-color: #8b6f4e; }
-.form-select {
-  appearance: none;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%238c7b6b' stroke-width='2' fill='none'/%3E%3C/svg%3E");
-  background-repeat: no-repeat; background-position: right 14px center;
-  padding-right: 40px;
-}
-.form-error { font-size: 12px; color: #c44; margin-top: 6px; }
-
-/* QR */
-.qr-section { text-align: center; }
-.qr-section h3 { font-size: 18px; margin-bottom: 4px; }
-.qr-section .qr-sub { font-size: 14px; color: #8c7b6b; margin-bottom: 16px; }
-.qr-img {
-  width: 200px; height: 200px; margin: 0 auto;
-  border-radius: 12px; overflow: hidden; background: #fdf8f4;
-  border: 2px solid #e8dcd0;
-}
-.qr-img img { width: 100%; height: 100%; object-fit: contain; }
-.qr-note {
-  font-size: 14px; color: #8b6f4e; font-weight: 500;
-  margin-top: 16px; padding: 12px; background: #fdf6f0; border-radius: 8px;
-}
-.personal-note {
-  padding: 14px; background: #f9f5ef; border-radius: 10px;
-  font-size: 14px; color: #5f4e3f; line-height: 1.7; text-align: left;
-  margin-bottom: 16px; border-left: 3px solid #c4a882;
-}
-.personal-note strong { color: #8b6f4e; }
-
-.hidden { display: none !important; }
-.footer { text-align: center; padding: 24px 0; font-size: 12px; color: #bfb19f; }
-</style>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="theme-color" content="#7b4f3b">
+  <title>中国学生常见7个英语发音误区｜CAROL WORKS</title>
+  <style>
+    :root{--ink:#302a26;--muted:#75685f;--paper:#fffdf9;--wash:#f7f0e8;--brand:#7b4f3b;--brand2:#a9785d;--line:#e8ddd2;--ok:#37765c;--bad:#a04e44;--shadow:0 12px 35px rgba(67,43,30,.08)}
+    *{box-sizing:border-box} body{margin:0;background:linear-gradient(160deg,#f7eee5,#fffdf9 42%,#f5eee8);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei",sans-serif;line-height:1.65}
+    button{font:inherit}.shell{width:min(760px,100%);margin:auto;padding:22px 16px 56px}.brand{font-size:12px;letter-spacing:.16em;color:var(--brand);font-weight:750;margin:4px 2px 16px}.card{background:rgba(255,253,249,.96);border:1px solid var(--line);border-radius:20px;padding:24px;box-shadow:var(--shadow)}
+    h1{font-size:clamp(27px,7vw,42px);line-height:1.18;margin:0 0 14px;letter-spacing:-.02em}h2{font-size:24px;line-height:1.3;margin:0 0 14px}h3{font-size:18px;margin:0 0 8px}.lead{font-size:16px;color:var(--muted);margin:0 0 22px}.small{font-size:13px;color:var(--muted)}.hidden{display:none!important}
+    .btn{width:100%;border:0;border-radius:12px;padding:13px 16px;cursor:pointer;margin-top:12px;font-weight:700}.primary{background:var(--brand);color:#fff}.secondary{background:#efe4da;color:var(--ink)}.ghost{background:transparent;color:var(--brand);border:1px solid var(--line)}.record-primary{background:#9b5b45;color:#fff}.record-stop{background:#7f3f36;color:#fff}.btn:disabled{opacity:.45;cursor:not-allowed}
+    .steps{display:grid;grid-template-columns:repeat(7,1fr);gap:6px;margin:0 0 15px}.dot{height:6px;border-radius:9px;background:#e4d8cf}.dot.done{background:var(--brand2)}.dot.now{background:var(--brand);box-shadow:0 0 0 3px #eadbd2}
+    .eyebrow{font-size:13px;color:var(--brand);font-weight:750;margin-bottom:8px}.question{font-size:21px;font-weight:750;line-height:1.5;margin-bottom:18px}.option{display:block;width:100%;text-align:left;background:#fff;border:1px solid var(--line);border-radius:13px;padding:13px 14px;margin:9px 0;color:var(--ink);cursor:pointer}.option:hover,.option.selected{border-color:var(--brand2);background:#fbf5ef}.option.correct{border-color:var(--ok);background:#eef7f1}.option.wrong{border-color:var(--bad);background:#fff1ef}.option:disabled{cursor:default;color:var(--ink)}u{text-decoration-thickness:2px;text-underline-offset:4px}
+    .reveal{margin-top:20px;padding:18px;border-radius:15px;background:var(--wash);border-left:4px solid var(--brand2)}.verdict{font-weight:800;margin-bottom:7px}.verdict.ok{color:var(--ok)}.verdict.bad{color:var(--bad)}.memory{font-weight:800;color:var(--brand);margin-top:10px}.words{display:flex;flex-wrap:wrap;gap:8px;margin:10px 0}.word{background:#fff;border:1px solid var(--line);border-radius:10px;padding:7px 10px}.ipa{color:var(--brand);font-family:Georgia,serif;margin-left:5px}.sentence{font-family:Georgia,"Times New Roman",serif;font-size:18px;background:#fff;border:1px solid var(--line);border-radius:11px;padding:11px 13px;margin:9px 0}
+    .annotated{display:inline-flex;flex-direction:column;align-items:center;justify-content:flex-end;line-height:1.15;min-width:34px}.annotated .phonetic{font-size:11px;color:var(--brand);font-weight:500;white-space:nowrap;margin-top:4px}.passage{display:flex;flex-wrap:wrap;align-items:flex-end;gap:12px 7px;line-height:1.2!important}
+    .recorder{margin-top:15px;border-top:1px dashed #d8c8bb;padding-top:14px}.rec-row{display:flex;gap:8px;flex-wrap:wrap}.rec-row .btn{width:auto;flex:1;min-width:105px;margin-top:8px}.timer{font-variant-numeric:tabular-nums;color:var(--bad);font-weight:700}.audio{width:100%;margin-top:10px}
+    .summary{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:18px 0}.metric{background:var(--wash);border-radius:14px;padding:15px;text-align:center}.metric strong{display:block;font-size:30px;color:var(--brand)}.report,.rx{border:1px solid var(--line);border-radius:15px;padding:16px;margin:12px 0}.tag{display:inline-block;font-size:12px;border-radius:999px;padding:3px 9px;margin-bottom:7px}.tag.ok{background:#e8f4ed;color:var(--ok)}.tag.bad{background:#fbe9e6;color:var(--bad)}.rx{background:#fffaf5}.rx ul{padding-left:20px}.rx li{margin:5px 0}.section{margin-top:28px;padding-top:24px;border-top:1px solid var(--line)}.passage{font-family:Georgia,"Times New Roman",serif;font-size:19px;line-height:1.9;background:#fff;border:1px solid var(--line);border-radius:14px;padding:18px}.notice{font-size:13px;color:var(--muted);background:#f6f1ec;border-radius:10px;padding:10px 12px;margin-top:12px}
+    .offer-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}.offer{border:1px solid var(--line);border-radius:15px;padding:16px;background:#fffaf5}.offer .price{font-size:25px;font-weight:800;color:var(--brand);margin:5px 0}.offer ul{padding-left:19px;margin:8px 0}.qr-box{text-align:center;margin-top:18px;padding:18px;background:var(--wash);border-radius:15px}.qr-box img{display:block;width:240px;max-width:80%;height:auto;margin:12px auto;border-radius:10px}.share-btn{margin-top:8px!important}
+    @media(max-width:520px){.card{padding:17px 15px;border-radius:16px}.shell{padding:12px 10px 36px}.question{font-size:19px;margin-bottom:12px}.option{padding:10px 12px;margin:7px 0}.reveal{padding:13px;margin-top:13px}.reveal p{margin:7px 0}.reveal h3{margin-top:12px!important}.sentence,.passage{font-size:17px}.summary{grid-template-columns:1fr 1fr}.offer-grid{grid-template-columns:1fr}.btn{padding:11px 14px;margin-top:9px}}
+  </style>
 </head>
 <body>
+<main class="shell">
+  <div class="brand">CAROL WORKS</div>
 
-<div class="container">
+  <section id="start" class="card">
+    <div class="eyebrow">发音自测 · Web V1</div>
+    <h1>中国学生常见的<br>7个英语发音误区</h1>
+    <p class="lead">知道规则，并不代表能准确地读出来。用3分钟找到你的发音误区，还有一份专门为您量身定做的练习锦囊。</p>
+    <button class="btn primary" id="startBtn">练习开始</button>
+    <button class="btn ghost hidden" id="resumeBtn">继续上次未完成的测试</button>
+  </section>
 
-  <div id="wechat-tip" class="tip-bar hidden">
-    <div class="tip-badge">i</div>
-    <p class="tip-text" id="wechat-tip-text">你正在微信内打开。答题和看解析都正常，想边看边录音的话，点右上角用浏览器打开。</p>
-    <button class="tip-action" onclick="closeWechatTip()">&times;</button>
-  </div>
-
-  <div id="resume-banner" class="tip-bar green hidden">
-    <div class="tip-badge">R</div>
-    <p class="tip-text">上次测到一半，要继续吗？</p>
-    <button class="tip-action" onclick="resumeQuiz()">继续</button>
-  </div>
-
-  <!-- ====== START ====== -->
-  <div id="screen-start">
-    <div class="header">
-      <h1>你的发音盲区在哪里？</h1>
-      <p class="subtitle">8 道题 · 5 分钟 · 找到中国人最容易发错的音</p>
-    </div>
+  <section id="quiz" class="hidden">
+    <div class="steps" id="steps"></div>
     <div class="card">
-      <p style="font-size: 14px; color: #8c7b6b; line-height: 1.7;">
-        嗨，我是 Carol，专业纠音老师。<br><br>
-        这个小测试不考听力、不考语法，只测一件事——<strong>你对英语发音的感觉</strong>。<br><br>
-        每答完一题，你可以把那几个词读一遍发给我。<br>
-        答对不等于会读，我要听的是你的嘴巴。
-      </p>
-      <button class="btn btn-primary mt-16" onclick="startQuiz()">开始测试 &rarr;</button>
-      <button id="btn-resume-start" class="btn btn-text mt-12 hidden" onclick="resumeQuiz()">继续上次的测试</button>
+      <div class="eyebrow" id="qNo"></div>
+      <div class="question" id="qText"></div>
+      <div id="options"></div>
+      <button class="btn primary" id="submitBtn" disabled>提交答案</button>
+      <div id="reveal" class="reveal hidden"></div>
+      <button class="btn primary hidden" id="nextBtn">下一题 →</button>
+      <button class="btn ghost hidden" id="prevBtn">← 上一题</button>
     </div>
-  </div>
+  </section>
 
-  <!-- ====== QUIZ ====== -->
-  <div id="screen-quiz" class="hidden">
-    <div class="progress-bar" id="progress-bar"></div>
-    <div class="card">
-      <div class="q-number" id="q-number"></div>
-      <div class="q-text" id="q-text"></div>
-      <div class="options" id="options"></div>
-      <div id="explanation" class="explanation hidden"></div>
-      <div id="read-aloud" class="read-aloud hidden">
-        <div class="read-aloud-title">读一遍给我听</div>
-        <div class="read-aloud-words" id="read-aloud-words"></div>
-        <div id="record-slot"></div>
-      </div>
-      <button class="btn btn-primary mt-16" id="btn-next" disabled onclick="nextQuestion()">下一题 &rarr;</button>
+  <section id="results" class="card hidden">
+    <div class="eyebrow">你的测试报告</div>
+    <h1>7个英语发音误区</h1>
+    <p class="lead" id="encouragement"></p>
+    <div class="summary">
+      <div class="metric"><strong id="rightCount">0</strong>答对题数</div>
+      <div class="metric"><strong id="blindCount">0</strong>重点练习项</div>
     </div>
-  </div>
+    <div id="blindspotSection">
+      <h2>这几个发音细节值得再练一练</h2>
+      <div id="reportList"></div>
+    </div>
 
-  <!-- ====== RESULT ====== -->
-  <div id="screen-result" class="hidden">
-    <div class="header">
-      <h1>你的发音诊断报告</h1>
+    <div class="section" id="prescriptionSection">
+      <div class="eyebrow">第二部分</div>
+      <h2>你的专属发音练习处方</h2>
+      <p class="lead">系统只列出你答错的项目。先读单词，再读句子，录下来自己回听。</p>
+      <div id="prescriptions"></div>
     </div>
-    <div class="card">
-      <div class="result-score" id="result-score"></div>
-      <div class="result-label" id="result-label"></div>
-      <div id="result-details"></div>
 
-      <div id="practice-section" class="hidden mt-16">
-        <div class="section-title">针对你的盲区的练习句</div>
-        <div class="practice-sentences" id="practice-sentences"></div>
+    <div class="section">
+      <div class="eyebrow">第三部分 · 所有人共同练习</div>
+      <h2>7个发音误区综合练习</h2>
+      <p class="lead">每天读一遍。慢一点，把每个动作做完整，熟能生巧。</p>
+      <div class="passage">
+        <span class="annotated"><span>After</span><span class="phonetic">/ˈɑːftə/</span></span>
+        <span class="annotated"><span>breakfast,</span><span class="phonetic">/ˈbrekfəst/</span></span>
+        <span class="annotated"><span>I</span><span class="phonetic">/aɪ/</span></span>
+        <span class="annotated"><span>had</span><span class="phonetic">/hæd/</span></span>
+        <span class="annotated"><span>a</span><span class="phonetic">/ə/</span></span>
+        <span class="annotated"><span>great</span><span class="phonetic">/ɡreɪt/</span></span>
+        <span class="annotated"><span>idea.</span><span class="phonetic">/aɪˈdɪə/</span></span>
+        <span class="annotated"><span>I</span><span class="phonetic">/aɪ/</span></span>
+        <span class="annotated"><span>would</span><span class="phonetic">/wʊd/</span></span>
+        <span class="annotated"><span>ride</span><span class="phonetic">/raɪd/</span></span>
+        <span class="annotated"><span>my</span><span class="phonetic">/maɪ/</span></span>
+        <span class="annotated"><span>bike</span><span class="phonetic">/baɪk/</span></span>
+        <span class="annotated"><span>to</span><span class="phonetic">/tə/</span></span>
+        <span class="annotated"><span>school</span><span class="phonetic">/skuːl/</span></span>
+        <span class="annotated"><span>and</span><span class="phonetic">/ənd/</span></span>
+        <span class="annotated"><span>meet</span><span class="phonetic">/miːt/</span></span>
+        <span class="annotated"><span>three</span><span class="phonetic">/θriː/</span></span>
+        <span class="annotated"><span>people.</span><span class="phonetic">/ˈpiːpəl/</span></span>
+        <span class="annotated"><span>A</span><span class="phonetic">/ə/</span></span>
+        <span class="annotated"><span>little</span><span class="phonetic">/ˈlɪtəl/</span></span>
+        <span class="annotated"><span>apple</span><span class="phonetic">/ˈæpəl/</span></span>
+        <span class="annotated"><span>fell</span><span class="phonetic">/fel/</span></span>
+        <span class="annotated"><span>from</span><span class="phonetic">/frəm/</span></span>
+        <span class="annotated"><span>my</span><span class="phonetic">/maɪ/</span></span>
+        <span class="annotated"><span>bag</span><span class="phonetic">/bæɡ/</span></span>
+        <span class="annotated"><span>beside</span><span class="phonetic">/bɪˈsaɪd/</span></span>
+        <span class="annotated"><span>the</span><span class="phonetic">/ðə/</span></span>
+        <span class="annotated"><span>pool.</span><span class="phonetic">/puːl/</span></span>
+        <span class="annotated"><span>I</span><span class="phonetic">/aɪ/</span></span>
+        <span class="annotated"><span>picked</span><span class="phonetic">/pɪkt/</span></span>
+        <span class="annotated"><span>it</span><span class="phonetic">/ɪt/</span></span>
+        <span class="annotated"><span>up</span><span class="phonetic">/ʌp/</span></span>
+        <span class="annotated"><span>and</span><span class="phonetic">/ənd/</span></span>
+        <span class="annotated"><span>walked</span><span class="phonetic">/wɔːkt/</span></span>
+        <span class="annotated"><span>to</span><span class="phonetic">/tə/</span></span>
+        <span class="annotated"><span>work.</span><span class="phonetic">/wɜːk/</span></span>
+        <span class="annotated"><span>On</span><span class="phonetic">/ɒn/</span></span>
+        <span class="annotated"><span>the</span><span class="phonetic">/ðə/</span></span>
+        <span class="annotated"><span>way,</span><span class="phonetic">/weɪ/</span></span>
+        <span class="annotated"><span>I</span><span class="phonetic">/aɪ/</span></span>
+        <span class="annotated"><span>saw</span><span class="phonetic">/sɔː/</span></span>
+        <span class="annotated"><span>a</span><span class="phonetic">/ə/</span></span>
+        <span class="annotated"><span>sheep</span><span class="phonetic">/ʃiːp/</span></span>
+        <span class="annotated"><span>on</span><span class="phonetic">/ɒn/</span></span>
+        <span class="annotated"><span>a</span><span class="phonetic">/ə/</span></span>
+        <span class="annotated"><span>ship</span><span class="phonetic">/ʃɪp/</span></span>
+        <span class="annotated"><span>and</span><span class="phonetic">/ənd/</span></span>
+        <span class="annotated"><span>heard</span><span class="phonetic">/hɜːd/</span></span>
+        <span class="annotated"><span>a</span><span class="phonetic">/ə/</span></span>
+        <span class="annotated"><span>very</span><span class="phonetic">/ˈveri/</span></span>
+        <span class="annotated"><span>funny</span><span class="phonetic">/ˈfʌni/</span></span>
+        <span class="annotated"><span>story.</span><span class="phonetic">/ˈstɔːri/</span></span>
+        <span class="annotated"><span>“Well,”</span><span class="phonetic">/wel/</span></span>
+        <span class="annotated"><span>I</span><span class="phonetic">/aɪ/</span></span>
+        <span class="annotated"><span>said,</span><span class="phonetic">/sed/</span></span>
+        <span class="annotated"><span>“this</span><span class="phonetic">/ðɪs/</span></span>
+        <span class="annotated"><span>is</span><span class="phonetic">/ɪz/</span></span>
+        <span class="annotated"><span>not</span><span class="phonetic">/nɒt/</span></span>
+        <span class="annotated"><span>a</span><span class="phonetic">/ə/</span></span>
+        <span class="annotated"><span>bad</span><span class="phonetic">/bæd/</span></span>
+        <span class="annotated"><span>day.”</span><span class="phonetic">/deɪ/</span></span>
+        <span class="annotated"><span>In</span><span class="phonetic">/ɪn/</span></span>
+        <span class="annotated"><span>the</span><span class="phonetic">/ði/</span></span>
+        <span class="annotated"><span>evening,</span><span class="phonetic">/ˈiːvnɪŋ/</span></span>
+        <span class="annotated"><span>I</span><span class="phonetic">/aɪ/</span></span>
+        <span class="annotated"><span>ate</span><span class="phonetic">/eɪt/</span></span>
+        <span class="annotated"><span>the</span><span class="phonetic">/ðə/</span></span>
+        <span class="annotated"><span>apple</span><span class="phonetic">/ˈæpəl/</span></span>
+        <span class="annotated"><span>and</span><span class="phonetic">/ənd/</span></span>
+        <span class="annotated"><span>had</span><span class="phonetic">/hæd/</span></span>
+        <span class="annotated"><span>a</span><span class="phonetic">/ə/</span></span>
+        <span class="annotated"><span>glass</span><span class="phonetic">/ɡlɑːs/</span></span>
+        <span class="annotated"><span>of</span><span class="phonetic">/əv/</span></span>
+        <span class="annotated"><span>wine.</span><span class="phonetic">/waɪn/</span></span>
       </div>
+      <div id="finalRecorder"></div>
+    </div>
 
-      <div class="action-row mt-16">
-        <button class="btn btn-primary" onclick="showForm()">加我微信，听我亲自帮你纠音 &rarr;</button>
-        <button class="btn btn-secondary" onclick="showChallenge()">再读一个句子（高阶挑战）</button>
-        <button class="btn btn-secondary hidden" id="btn-view-recordings" onclick="showSummary()">查看我录的发音</button>
-        <button class="btn btn-text" id="btn-copy-result" onclick="copyResult()">复制我的诊断结果</button>
-        <button class="btn btn-text" onclick="startQuiz()">再测一次</button>
+    <div class="section" id="humanReviewSection">
+      <p class="lead">如果你想听听 Carol 真人给你的建议，请把刚才的录音发给我。你可以选择：</p>
+      <div class="offer-grid">
+        <div class="offer">
+          <h3>1｜Carol 发音快评</h3>
+          <div class="price">首批体验价 ¥19.9</div>
+          <p>Carol会根据你的综合练习录音，指出1–2个关键问题，并给出练习建议。</p>
+          <div class="small">添加微信后备注：发音快评</div>
+        </div>
+        <div class="offer">
+          <h3>2｜20分钟一对一发音诊断</h3>
+          <div class="price">¥99</div>
+          <p>Carol会与你进行20分钟一对一交流，结合你的录音和现场朗读，帮你梳理整体发音问题，解答你的发音困惑，并明确下一阶段最值得优先改善的方向和练习方法。</p>
+          <div class="small">添加微信后备注：发音诊断</div>
+        </div>
+      </div>
+      <div class="qr-box">
+        <strong>添加 Carol 微信</strong>
+        <img src="assets/carol-wechat-qr-20261003.png" alt="Carol 微信二维码" width="888" height="1140">
+        <div class="small">请选择备注“发音快评”或“发音诊断”</div>
       </div>
     </div>
-  </div>
-
-  <!-- ====== SENTENCE CHALLENGE ====== -->
-  <div id="screen-challenge" class="hidden">
-    <div class="header">
-      <h1>高阶挑战</h1>
-      <p class="subtitle">单个音能读对，放进句子呢</p>
-    </div>
-    <div class="card">
-      <p style="font-size:14px;color:#8c7b6b;line-height:1.7;margin-bottom:16px;">
-        读一个完整的句子，我能听出你的连读和语调——这是单词测不出来的。<br>
-        不方便出声的话，跳过也没关系。
-      </p>
-      <div class="practice-sentences" id="challenge-sentences"></div>
-      <div class="read-aloud">
-        <div class="read-aloud-title">读一遍给我听</div>
-        <div id="record-sentence"></div>
-      </div>
-      <div class="action-row mt-16">
-        <button class="btn btn-primary" onclick="finishChallenge()">完成，下一步 &rarr;</button>
-        <button class="btn btn-text" onclick="skipChallenge()">跳过，不读了</button>
-      </div>
-    </div>
-  </div>
-
-  <!-- ====== RECORDING SUMMARY ====== -->
-  <div id="screen-summary" class="hidden">
-    <div class="header">
-      <h1>我的发音录音</h1>
-      <p class="subtitle">检查一下，然后发给我</p>
-    </div>
-    <div class="card">
-      <div id="recording-list"></div>
-      <p style="font-size:12px;color:#a89279;text-align:center;margin-top:8px;line-height:1.6;">
-        录音只保存在当前页面，刷新后需要重录，请现在发给我
-      </p>
-      <div class="action-row mt-16">
-        <button class="btn btn-primary" id="btn-share-all" onclick="shareAllRecordings()">全部发给我 &rarr;</button>
-        <button class="btn btn-secondary" id="btn-download-all" onclick="downloadAllRecordings()">电脑端：逐个下载</button>
-        <button class="btn btn-text" onclick="showForm()">直接加微信 &rarr;</button>
-      </div>
-    </div>
-  </div>
-
-  <!-- ====== FORM ====== -->
-  <div id="screen-form" class="hidden">
-    <div class="header">
-      <h1>就差一步</h1>
-      <p class="subtitle">告诉我你的情况，我会给你更有针对性的建议</p>
-    </div>
-    <div class="card">
-      <div class="form-group">
-        <label class="form-label">你的昵称</label>
-        <input class="form-input" id="input-nickname" placeholder="怎么称呼你？" maxlength="20">
-        <div class="form-error hidden" id="error-nickname">先告诉我你的昵称吧</div>
-      </div>
-      <div class="form-group">
-        <label class="form-label">你学英语的目标是？</label>
-        <select class="form-select" id="input-goal">
-          <option value="">选一个吧</option>
-          <option>考试备考</option>
-          <option>工作沟通</option>
-          <option>日常交流</option>
-          <option>就想说得好听</option>
-        </select>
-        <div class="form-error hidden" id="error-goal">选一个学习目标吧</div>
-      </div>
-      <button class="btn btn-primary mt-16" onclick="revealQR()">下一步 &rarr;</button>
-    </div>
-  </div>
-
-  <!-- ====== QR ====== -->
-  <div id="screen-qr" class="hidden">
-    <div class="header">
-      <h1>想让我听听你的发音？</h1>
-      <p class="subtitle">把练习句读一遍发给我，我帮你逐句纠</p>
-    </div>
-    <div class="card qr-section">
-      <div id="personal-note" class="personal-note hidden"></div>
-      <h3>扫码加 Carol</h3>
-      <p class="qr-sub">备注「发音自测」我就能认出你</p>
-      <div class="qr-img">
-        <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAnwAAAJ8CAIAAADrj+sBAAAPgElEQVR4nO3cy3HD0BFFQcqlMJSHNw7fG+fBPOAMXFg8n5oBugMQQXx4Clrcn+u6PgDA/98/gs8AAEQXADredAEgIroAEBFdAIiILgBERBcAIqILABHRBYCI6AJARHQBICK6ABARXQCIiC4AREQXACKiCwAR0QWAiOgCQER0ASAiugAQEV0AiIguAEREFwAiogsAEdEFgIjoAkBEdAEgIroAEBFdAIiILgBERBcAIqILABHRBYCI6AJARHQBICK6ABARXQCIiC4AREQXACKiCwAR0QWAiOgCQER0ASAiugAQEV0AiIguAEREFwAiv59h/v71z89bff/9n+z83PmsU+4c88bvPu14nvqclvfGKeU9tvH8lKY9X950ASAiugAQEV0AiIguAEREFwAiogsAEdEFgIjoAkBEdAEgIroAEBFdAHjr9vLGLc07pm2flpuup67XtI3ZaffhtHts2vmZtrldPjsbr9fGe/4Ob7oAEBFdAIiILgBERBcAIqILABHRBYCI6AJARHQBICK6ABARXQCIiC4ARFZuL9/x1A3ecg952jbstH3maVu+G/ery3vs1GdNu+dL0+7VjbzpAkBEdAEgIroAEBFdAIiILgBERBcAIqILABHRBYCI6AJARHQBICK6ABB57PbyU5W7ytOUO73TzuHGnefStOt1ysb9c/43b7oAEBFdAIiILgBERBcAIqILABHRBYCI6AJARHQBICK6ABARXQCIiC4ARGwvP9Cpjdly0/XUMU/bQ974vTZ68yY5u3jTBYCI6AJARHQBICK6ABARXQCIiC4AiC4APIs3XQCIiC4AREQXACKiCwCRx24vl7vB02zcmD11vTZu8E7buH7qtXjqNS099XuVvOkCQER0ASAiugAQEV0AiIguAEREFwAiogsAEdEFgIjoAkBEdAEgIroAEFm5vTxtN/jNyn3dabuv03aDN244+zvN+bnD72rDmy4AREQXACKiCwAR0QWAiOgCQER0ASAiugAQEV0AiIguAEREFwAiogsAb91enravO4193TnKrdpp132acgd74+/YtON5M2+6ABARXQCIiC4AREQXACKiCwAR0QWAiOgCQER0ASAiugAQEV0AiIguALx1e7l0Z4v11GbptM/auNe6cV/3zvFM2zqedp6n3fOnnuXyN+GOjc/Oxt8xb7oAEBFdAIiILgBERBcAIqILABHRBYCI6AJARHQBICK6ABARXQCIiC4ARF69vXzHtP3PN284P3Xz9qn7uqeU133a/vA00zaT/xbez950ASAiugAQEV0AiIguAEREFwAiogsAEdEFgIjoAkBEdAEgIroAEBFdAHjr9vJT93U3Hs/GLdZTNm66njrmac/gU++fadvL047nb+EzeIc3XQCIiC4AREQXACKiCwAR0QWAiOgCQER0ASAiugAQEV0AiIguAEREFwDeur38VKd2TTfuTt9RbvDecer83DnmU9dr4x5y6amb0tOUvy3fYb9jd3jTBYCI6AJARHQBICK6ABARXQCIiC4AREQXACKiCwAR0QWAiOgCQER0ASDyc13XZ5tyW9he667zXNp4Hz71s566y11+1inlc/q38HfDmy4AREQXACKiCwAR0QWAiOgCQER0ASAiugAQEV0AiIguAEREFwAiogsAb91eLjdC7zi1+7pxP3ba95q2obpxX3fjZ50y7X6e9pyeUj7vf8O++x3edAFAdAHgWbzpAkBEdAEgIroAEBFdAIiILgBERBcAIqILABHRBYCI6ALAW7eXN+4zT/PU/dhT7NDu2rN98/FMey6m/fZ+h+0q3+FNFwAiogsAEdEFgIjoAkBEdAEgIroAEBFdAIiILgBERBcAIqILABHRBYDI72eYU9ue03ZETx1P+XfuuPNZ047nlGnfa+MO7R1vfnY2XtOn/rac4k0XACKiCwAR0QWAiOgCQER0ASAiugAQEV0AiIguAEREFwAiogsAEdEFgLduL9+xcUPVNuwcG/e9y/3Yjbvl0455mlO/P+Vv7/eh19SbLgBERBcAIqILABHRBYCI6AJARHQBICK6ABARXQCIiC4AREQXACKiCwCRn+u6Ptts3DF+6vm5o9y4vuOp1/SUadertPF3Y9p5Lu+f78Jn2ZsuAEREFwAiogsAEdEFgIjoAkBEdAEgIroAEBFdAIiILgBERBcAIqILAJGV28ulN+88b9z7ffNWbWna/bxxb3zj87Xx/HyHPV/edAEgIroAEBFdAIiILgBERBcAIqILABHRBYCI6AJARHQBICK6ABARXQCI/H6GmbZHemq3s9w+Lbegy+s17d4oj3na1vG0e+zN9+opG8/zd9iu8h3edAEgIroAEBFdAIiILgBERBcAIqILABHRBYCI6AJARHQBICK6ABARXQCI/FzX9Znk1G7ntO3caaZtqE7bWd24Q3vKU8+z34TGxj3kkjddAIiILgBERBcAIqILABHRBYCI6AJARHQBICK6ABARXQCIiC4AREQXACK/n4WmbahO26p96rXYeL2eev9M2zre+FlPPZ5pu+XfYc+7N10AiIguAEREFwAiogsAEdEFgIjoAkBEdAEgIroAILoA8CzedAEgIroAEFm5vXxKuf+5cUP11Pm583c2bjiXO9jT7p9Tn3XqHpu2ST7tepXHM+3emMabLgBERBcAIqILABHRBYCI6AJARHQBICK6ABARXQCIiC4AREQXACKiCwCRV28vlzbu4m7cKL6j3JQ+9d2futO78X6+ozw/G49n4+/GKd50ASAiugAQEV0AiIguAEREFwAiogsAEdEFgIjoAkBEdAEgIroAEBFdAIis3F6etsk57XimmbYbfEe5q7zx/tm4KX3Hxj3tafdPud39HXb/3OFNFwAiogsAEdEFgIjoAkBEdAEgIroAEBFdAIiILgBERBcAIqILABHRBYDIz3Vdn21ObXtO+zulaXut00y7XhtNu8ee+psw7bOeunF9ijddAIiILgBERBcAIqILABHRBYCI6AJARHQBICK6ABARXQCIiC4AREQXACKP3V6etv95yrRj3rhD+9TzfMq0zdtyD/mUad/91Gfd8eZd5Tu86QJARHQBICK6ABARXQCIiC4AREQXACKiCwAR0QWAiOgCQER0ASAiugAQ+f0stHHX9NTxbNxH3XgtStOuRXk807bNN+6N3/HUZ/lv2Hm+w5suAEREFwAiogsAEdEFgIjoAkBEdAEgIroAEBFdAIiILgBERBcAIqILAJGf67o+20zbH572d+6Ytvs67Xim2bjP/NTn/ZRpz/vG35aNvOkCQER0ASAiugAQEV0AiIguAEREFwAiogsAEdEFgIjoAkBEdAEgIroAEPn9DFPu9JaftXGP9Km7r+VW9h0b936fukl+yrRj3ng/fxf+Zt7hTRcAIqILABHRBYCI6AJARHQBICK6ABARXQCIiC4AREQXACKiCwAR0QWAt24vP3Vvc9qOcbnFese03ddpn/XU+/CUacdTKr/7tHP4N+x37A5vugAQEV0AiIguAIguADyLN10AiIguAEREFwAiogsAEdEFgIjoAkBEdAHgrdvLp7Y0p/2dafuf5V7rtF3ljffPHU89njs27jxPey5OKb/Xd9jv6h3edAEgIroAEBFdAIiILgBERBcAIqILABHRBYCI6AJARHQBICK6ABARXQB46/byUzc5p235bjyHd0w7h3dMO55Tpp2faabtuk/7bfkuvKZ3eNMFgIjoAkBEdAEgIroAEBFdAIiILgBERBcAIqILABHRBYCI6AJARHQBIPJzXdfniXut0zZ4y33UU556DkvT9pDvKM/ztN3pjffqtOM55S+8piVvugAQEV0AiIguAEREFwAiogsAEdEFgIjoAkBEdAEgIroAEBFdAIiILgC8dXt5mqduw54ybWP2lI0bvKc8dUt8mo3nsDzm70OfQW+6ABARXQCIiC4AREQXACKiCwAR0QWAiOgCQER0ASAiugAQEV0AiIguAER+Pwtt3Gudts+88TxP+14bd7BPHc/G7zVtg7c85mn3xnfYtSh50wWAiOgCQER0ASAiugAQEV0AiIguAEREFwAiogsAEdEFgIjoAkBEdAHgrdvL5W5nuR87bcf41Hku/84dG++NUzYe8zQbN6XvmPZ3Ttm44exNFwAiogsAEdEFgIjoAkBEdAEgIroAEBFdAIiILgBERBcAIqILABHRBYDIz3Vd1WfxwM3kO6btM58y7TxvvBbTtrKfeh+esvG6f4ftM3vTBYCI6AJARHQBICK6ABARXQCIiC4AREQXACKiCwAR0QWAiOgCQER0ASDy+xlm2q5p6c5G6LS931PXa9p1n7bXOu2abvysN29KTzvPT91VvsObLgBERBcAIqILABHRBYCI6AJARHQBICK6ABARXQCIiC4AREQXAEQXAJ5l3PbyHRv3Nstt4Wn7zNNsPD/TPqvcKD51LabtKpfKY5727Ezj38sAEBFdAIiILgBERBcAIqILABHRBYCI6AJARHQBICK6ABARXQCIiC4ARH6u6/pMMm1n9albvhuvxbT92Deb9gxuPOZpx1P6HnqWN/6uetMFgIjoAkBEdAEgIroAEBFdAIiILgBERBcAIqILABHRBYCI6AJARHQBIPJbfRDP3EOetrN66nim7TxPO56Nm+TTNsCn7SpP+924Y9qu8h3edAEgIroAEBFdAIiILgBERBcAIqILABHRBYCI6AJARHQBICK6ABARXQCI2F5eptyzvfN33rzFWn738pqWf2fjdu7GreNpu8p/w+7DkjddAIiILgBERBcAIqILABHRBYCI6AJARHQBICK6ABARXQCIiC4AREQXACKP3V6etrf51O/+5q3jO6btx27cZ96487zxmJ96P0/jTRcAIqILABHRBYCI6AJARHQBICK6ABARXQCIiC4AREQXACKiCwAR0QWAyMrt5XKD96lOncNyX/fU8Tx1h/aOacfz5u817dk55dR5/lt4Te/wpgsAEdEFgIjoAkBEdAEgIroAEBFdAIiILgBERBcAIqILABHRBYCI6AJA5Oe6ruqzAODVvOkCQER0ASAiugAQEV0AiIguAEREFwAiogsAEdEFgIjoAkBEdAEgIroAEBFdAIiILgBERBcAIqILABHRBYCI6AJARHQBICK6ABARXQCIiC4AREQXACKiCwAR0QWAiOgCQER0ASAiugAQEV0AiIguAEREFwAiogsAEdEFgIjoAkBEdAEgIroAEBFdAIiILgBERBcAIqILABHRBYCI6AJARHQBICK6ABARXQCIiC4AREQXACKiCwCfxn8BFGi01yGNmdIAAAAASUVORK5CYII=" alt="Carol 微信二维码">
-      </div>
-      <div class="qr-note">
-        扫码加好友，备注：<strong>发音自测</strong>
-      </div>
-      <button class="btn btn-secondary mt-16" onclick="startQuiz()">再测一次</button>
-    </div>
-  </div>
-
-  <div class="footer">heycarolzhao.github.io</div>
-
-</div>
+    <button class="btn secondary" id="restartBtn">重新测试</button>
+  </section>
+</main>
 
 <script>
-const isWeChat = /MicroMessenger/i.test(navigator.userAgent);
-
 const questions = [
   {
-    id: 1,
-    text: "以下划线部分的发音，哪一个和其他三个不同？",
-    options: ["sh<u>i</u>p", "f<u>i</u>sh", "b<u>i</u>n", "sh<u>ee</u>p"],
-    answer: 3,
-    explain: {
-      correct: "sheep 的下划线部分 ee 是长元音 /iː/，而 ship / fish / bin 的 i 都是短元音 /ɪ/。长短音不分是中国人第一高频发音错误。",
-      type: "长元音 /iː/ vs 短元音 /ɪ/",
-      sentence: "There's a sheep on the ship."
-    }
+    title:'下面哪组单词，画线部分的发音方式和另外两组不同？',
+    options:['A. id<u>ea</u> / breakf<u>a</u>st','B. w<u>or</u>k / b<u>ir</u>d','C. teach<u>er</u> / doct<u>or</u>'], answer:0,
+    name:'不该出现的 R 音', diagnosis:'idea 和 breakfast 的画线部分没有字母 R，不能自己加卷舌音。',
+    reveal:'99%的中国学生会在 idea 和 breakfast 的画线部分多加一个 R 卷舌音。', memory:'记住：没有字母 R，不能加卷舌音。',
+    targets:[['idea','/aɪˈdɪə/'],['breakfast','/ˈbrekfəst/']], sentence:'Eating a good breakfast is a great idea.', prompt:'回听时注意 idea 和 breakfast 的结尾或弱读位置，有没有多出来的卷舌。',
+    practiceWords:[['sofa','/ˈsəʊfə/'],['banana','/bəˈnɑːnə/'],['China','/ˈtʃaɪnə/'],['pizza','/ˈpiːtsə/'],['camera','/ˈkæmərə/']],
+    practiceSentences:['I had a good idea at breakfast.','The banana is next to the pizza.','The sofa came from China.','Take a photo with the camera.']
   },
   {
-    id: 2,
-    text: "以下划线部分的发音，哪一个和其他三个不同？",
-    options: ["<u>s</u>ix", "<u>th</u>ree", "<u>s</u>ay", "<u>s</u>ee"],
-    answer: 1,
-    explain: {
-      correct: "three 的 th 是咬舌音 /θ/，舌尖要放在上下齿之间；six / say / see 的 s 是 /s/，中文里就有。",
-      type: "咬舌音 /θ/ vs /s/",
-      sentence: "Six is not three."
-    }
+    title:'ship 和 sheep 的两个元音，最主要的区别是什么？',
+    options:['A. 主要只是元音的发音时长不同，一个短、一个长','B. 不只是元音的长短，嘴巴和口腔肌肉的松紧状态也不同','C. 差别很小，说快以后基本可以一样'], answer:1,
+    name:'/ɪ/ 与 /iː/：松紧不仅是长短', diagnosis:'不能只把 /ɪ/ 拉长；/ɪ/ 更放松，/iː/ 更紧。',
+    reveal:'这两个元音的发音时长不同，一个短、一个长。区别不只在时长，还在于发音时口腔和嘴巴肌肉的松紧程度不同。真正要练的是松弛与紧张两种状态。', memory:'/ɪ/ 短而放松；/iː/ 长而紧，嘴角向两边延伸。',
+    targets:[['ship','/ʃɪp/'],['sheep','/ʃiːp/']], sentence:"There's a sheep on the ship.", prompt:'回听 sheep：你是不是只把 ship 的元音拉长了？',
+    practiceWords:[['sit','/sɪt/'],['seat','/siːt/'],['live','/lɪv/'],['leave','/liːv/'],['fill','/fɪl/'],['feel','/fiːl/'],['chip','/tʃɪp/'],['cheap','/tʃiːp/']],
+    practiceSentences:['Please sit in this seat.','I live here, but I leave at three.','Fill the cup and feel the difference.','These chips are not cheap.']
   },
   {
-    id: 3,
-    text: "以下划线部分的发音，哪一个和其他三个不同？",
-    options: ["t<u>i</u>me", "l<u>i</u>ght", "c<u>a</u>t", "r<u>i</u>ght"],
-    answer: 2,
-    explain: {
-      correct: "cat 的 a 是单元音 /æ/，嘴巴张大不动；time / light / right 的 i 是双元音 /aɪ/，嘴巴要从 /a/ 滑到 /ɪ/。",
-      type: "双元音 /aɪ/ vs 单元音 /æ/",
-      sentence: "The sad man sat on his bed and said goodbye."
-    }
+    title:'关于 b<u>a</u>d、b<u>e</u>d 和 b<u>i</u>ke 的画线元音，哪项说法正确？',
+    options:['A. 三个音都可以通过改变长短来读','B. bad 和 bed 是单元音；bike 是有完整滑动的双元音','C. bad 和 bed 的口型基本一样，bike 只是读得更响'], answer:1,
+    name:'/æ/、/e/、/aɪ/：口型与滑动', diagnosis:'要区分两个单元音的张口度，也要把双元音的滑动读完整。',
+    reveal:'bad /bæd/ 和 bed /bed/ 都是单元音，发音过程中口型保持不变，但张口度和上下齿间距不同：/æ/ 的口腔开度更大，/e/ 较小。bike /baɪk/ 是双元音，要从第一个元音滑向第二个元音，口型会随之变化。', memory:'双元音要滑得完整、饱满、响亮。',
+    targets:[['bad','/bæd/'],['bed','/bed/'],['bike','/baɪk/']], sentence:'The bad man left his bike by the bed.', prompt:'回听时比较 /æ/ 和 /e/ 的开口大小，再听 /aɪ/ 有没有完整滑动。',
+    practiceWords:[['man','/mæn/'],['men','/men/'],['hat','/hæt/'],['head','/hed/'],['bag','/bæɡ/'],['beg','/beɡ/'],['time','/taɪm/'],['light','/laɪt/']],
+    practiceSentences:['The man met ten men.','Put the black hat on your head.','The bag is beside the bed.','I ride my bike at night.']
   },
   {
-    id: 4,
-    text: "以下划线部分的发音，哪一个和其他三个不同？",
-    options: ["<u>v</u>ery", "<u>w</u>ine", "<u>w</u>ell", "<u>w</u>ater"],
-    answer: 0,
-    explain: {
-      correct: "very 的 v 是 /v/，上牙咬下唇；wine / well / water 的 w 是 /w/，要噘嘴。v / w 混淆是中式发音经典问题。",
-      type: "辅音 /v/ vs /w/",
-      sentence: "You're doing very well today."
-    }
+    title:'先自然读一遍 “three”。读 th 时，你的舌头在哪里？',
+    options:['A. 舌尖始终藏在牙齿后面','B. 舌尖会轻轻来到上下牙齿之间','C. 我知道规则，但真正说的时候不确定有没有做到'], answer:1,
+    name:'th / s：知道不等于做到', diagnosis:'发 /θ/ 时，舌尖要真正来到上下牙齿之间。',
+    reveal:'发 /θ/ 时，舌尖轻轻放在上下牙齿之间，让气流从舌尖和牙齿之间通过。舌尖如果缩回牙齿后面，就容易读成 /s/。', memory:'舌尖要真正参与，不能只在脑子里知道。',
+    targets:[['three','/θriː/'],['think','/θɪŋk/'],['thank','/θæŋk/']], sentence:'Six is not three.', prompt:'回听时比较 six 的 /s/ 与 three 的 /θ/，确认舌尖真的参与了。',
+    practiceWords:[['thin','/θɪn/'],['thing','/θɪŋ/'],['Thursday','/ˈθɜːzdeɪ/'],['mouth','/maʊθ/'],['see','/siː/'],['sing','/sɪŋ/']],
+    practiceSentences:['Think about three things.','Thank them on Thursday.','I see a thin line.','Open your mouth and say three.']
   },
   {
-    id: 5,
-    text: "以下划线部分的发音，哪一个和其他三个不同？",
-    options: ["app<u>le</u>", "pian<u>o</u>", "phot<u>o</u>", "hell<u>o</u>"],
-    answer: 0,
-    explain: {
-      correct: "apple 的 le 是 Dark L /əl/，舌尖顶上颚的同时舌根后缩，是公认最难发的音之一。",
-      type: "Dark L",
-      sentence: "A little apple fell into the pool."
-    }
+    title:'先自然读 “very well”。读 very 的第一个音时，上牙有没有接触下嘴唇？',
+    options:['A. 上排牙齿轻触下嘴唇内侧','B. 双唇向前收圆，牙齿和嘴唇不接触','C. 上下嘴唇轻轻碰在一起'], answer:0,
+    name:'/f/、/v/、/w/：位置、清浊与口型', diagnosis:'/f/ 和 /v/ 的位置相同，清浊不同；/w/ 是另一个口型。',
+    reveal:'<strong>唇齿接触：</strong>/f/ 和 /v/ 的口腔位置相同，上牙轻触下嘴唇内侧。/f/ 是清辅音，声带不振动；/v/ 是浊辅音，声带振动。<br><br><strong>双唇圆起，唇齿不接触：</strong>/w/ 要双唇收圆，牙齿不接触嘴唇。', memory:'同一唇齿位置：/f/ 不振动，/v/ 振动；/w/ 圆唇不接触。',
+    targets:[['fly','/flaɪ/'],['knife','/naɪf/'],['very','/ˈveri/'],['vase','/vɑːz/'],['well','/wel/'],['wine','/waɪn/']], sentence:"You're doing very well today.", prompt:'回听时分清 /f/ 与 /v/ 的清浊，再比较 /v/ 与 /w/ 的嘴巴动作。',
+    practiceWords:[['voice','/vɔɪs/'],['visit','/ˈvɪzɪt/'],['video','/ˈvɪdiəʊ/'],['water','/ˈwɔːtə/'],['window','/ˈwɪndəʊ/'],['week','/wiːk/']],
+    practiceSentences:['Five visitors waited by the window.','We watch a video every week.','William visits us on Wednesday.','The wine is by the window.']
   },
   {
-    id: 6,
-    text: "以下划线部分的发音，哪一个和其他三个不同？",
-    options: ["c<u>a</u>t", "b<u>a</u>d", "b<u>e</u>d", "<u>a</u>pple"],
-    answer: 2,
-    explain: {
-      correct: "bed 的 e 是 /e/，嘴巴小一点；cat / bad / apple 的 a 都是 /æ/，嘴巴张大。/æ/ 中文里没有，很多同学发不准。",
-      type: "元音 /æ/ vs /e/",
-      sentence: "The black bag is on the red bed."
-    }
+    title:'关于 w<u>or</u>k 和 w<u>al</u>k 的画线元音，哪项说法正确？',
+    options:['A. 两个词主要靠有没有卷舌来区别','B. 两个词的元音不同','C. 两个词可以读成同一个元音，语境会说明意思'], answer:1,
+    name:'work / walk：不同元音', diagnosis:'work 与 walk 的元音不同，不能依靠语境或只靠卷舌区分。',
+    reveal:'work 和 walk 的元音不同，所以发音不能相同。', memory:'先分清两个元音，再分别准确发音。',
+    targets:[['work','/wɜːk/'],['walk','/wɔːk/']], sentence:'I walk to work every day.', prompt:'回听两个词的元音，确认嘴巴能自然切换，而不是读成同一个音。',
+    practiceWords:[['word','/wɜːd/'],['world','/wɜːld/'],['bird','/bɜːd/'],['wall','/wɔːl/'],['talk','/tɔːk/'],['small','/smɔːl/']],
+    practiceSentences:['I walk to work every day.','Write the word on the wall.','We talk about work in the hall.','A small bird crossed the road.']
   },
   {
-    id: 7,
-    text: "以下划线部分的发音，哪一个和其他三个不同？",
-    options: ["w<u>or</u>k", "g<u>ir</u>l", "w<u>al</u>k", "b<u>ir</u>d"],
-    answer: 2,
-    explain: {
-      correct: "walk 的 al 是 /ɔː/，嘴巴圆；work / girl / bird 的 or / ir 都是 /ɜː/，嘴巴扁。很多同学把 work 读成 walk，意思完全不同。",
-      type: "元音 /ɜː/ vs /ɔː/",
-      sentence: "Walk to work with the bird."
-    }
-  },
-  {
-    id: 8,
-    text: "以下划线部分的发音，哪一个和其他三个不同？",
-    options: ["w<u>or</u>ld", "ide<u>a</u>", "teach<u>er</u>", "g<u>ir</u>l"],
-    answer: 1,
-    explain: {
-      correct: "idea 的 a 没有 r 音，不需要卷舌；world / teacher / girl 都含 /r/ 卷舌音。很多同学把 idea 读成 'idear'，加了多余的卷舌。",
-      type: "卷舌音 /r/（注意不能卷舌的单词）",
-      sentence: "Eating a good breakfast — it's a great idea."
-    }
+    title:'读 apple、people、school。词尾 l 的舌头动作，哪项描述更准确？',
+    options:['A. 发成类似 /əʊ/ 的音','B. 舌尖有一个向上的动作，顶在上牙齿后面的位置','C. 舌尖不需要参与，只要把声音拖长'], answer:1,
+    name:'词尾 Dark L：最后要“收上去”', diagnosis:'词尾 L 的结尾动作要收住，不能像词首 L 一样再次释放。',
+    reveal:'这是一个很能体现是否接受过系统发音训练的细节，也能显示发音的精细程度。很多人会把词尾 l 误读成类似 /əʊ/ 的音，但词尾 l 并不是以 /əʊ/ 结尾。', memory:'这个小细节，很能体现发音的功力。',
+    targets:[['apple','/ˈæpəl/'],['people','/ˈpiːpəl/'],['school','/skuːl/']], sentence:'A little apple fell into the pool.', prompt:'回听多个 L：尤其注意词尾 L 有没有收住，而不是再次弹下来。',
+    practiceWords:[['little','/ˈlɪtəl/'],['bottle','/ˈbɒtəl/'],['table','/ˈteɪbəl/'],['pool','/puːl/'],['feel','/fiːl/'],['call','/kɔːl/']],
+    practiceSentences:['A little apple fell into the pool.','Put the bottle on the table.','People feel cool at school.','Please call Paul after school.']
   }
 ];
 
-const goalNotes = {
-  "考试备考": "我会重点帮你练听力和口语里最容易丢分的音",
-  "工作沟通": "我会重点帮你练职场高频表达里的发音",
-  "日常交流": "我会重点帮你练日常对话里最影响理解的音",
-  "就想说得好听": "我会重点帮你练让口语更地道的连读和语调"
-};
-
-let currentQ = 0;
-let selectedAnswer = null;
-let answers = [];
-let recordings = {};
-let recordingLabels = {};
-let copyTexts = {};
-let recordTimer = null;
-let recordSeconds = 0;
-let mediaRecorder = null;
-let audioChunks = [];
-let currentRecordKey = null;
-let currentStream = null;
-
-function stripTags(html) {
-  return html.replace(/<[^>]+>/g, '');
-}
-
-function mimeType() {
-  return MediaRecorder.isTypeSupported('audio/mp4') ? 'audio/mp4' : 'audio/webm';
-}
-function fileExt() {
-  return mimeType() === 'audio/mp4' ? 'm4a' : 'webm';
-}
-
-function init() {
-  if (isWeChat) document.getElementById('wechat-tip').classList.remove('hidden');
-  const saved = loadState();
-  if (saved && saved.screen && saved.screen !== 'screen-start') {
-    document.getElementById('btn-resume-start').classList.remove('hidden');
-    document.getElementById('resume-banner').classList.remove('hidden');
+let current=0, selected=null, answers=[], recordings={}, activeRecorder=null, activeStream=null, activeTimer=null;
+const $=id=>document.getElementById(id);
+function show(id){['start','quiz','results'].forEach(x=>$(x).classList.toggle('hidden',x!==id));scrollTo({top:0,behavior:'smooth'})}
+function wordsHTML(items){return '<div class="words">'+items.map(w=>'<span class="word">'+w[0]+' <span class="ipa">'+w[1]+'</span></span>').join('')+'</div>'}
+function save(){localStorage.setItem('carol-works-pronunciation-v1',JSON.stringify({current,answers}))}
+function clear(){localStorage.removeItem('carol-works-pronunciation-v1')}
+function buildSteps(){ $('steps').innerHTML=questions.map((_,i)=>'<span class="dot '+(i<current?'done':i===current?'now':'')+'"></span>').join('') }
+function start(reset=true){if(reset){current=0;answers=[];selected=null;clear()}show('quiz');render()}
+function render(){
+  buildSteps();
+  const q=questions[current];
+  $('qNo').textContent='第 '+(current+1)+' / 7 题';
+  $('qText').innerHTML=q.title;
+  $('options').innerHTML=q.options.map((o,i)=>'<button class="option" data-i="'+i+'">'+o+'</button>').join('');
+  document.querySelectorAll('.option').forEach(b=>b.onclick=()=>{
+    selected=Number(b.dataset.i);
+    document.querySelectorAll('.option').forEach(x=>x.classList.toggle('selected',x===b));
+    $('submitBtn').disabled=false;
+  });
+  $('prevBtn').classList.toggle('hidden',current===0);
+  $('reveal').classList.add('hidden');
+  $('nextBtn').classList.add('hidden');
+  selected=null;
+  if(answers[current]) showAnswered();
+  else {
+    $('submitBtn').classList.remove('hidden');
+    $('submitBtn').disabled=true;
   }
 }
-
-function show(screenId) {
-  document.querySelectorAll('[id^="screen-"]').forEach(el => el.classList.add('hidden'));
-  document.getElementById(screenId).classList.remove('hidden');
-  saveState(screenId);
-  window.scrollTo(0, 0);
-}
-
-function closeWechatTip() {
-  document.getElementById('wechat-tip').classList.add('hidden');
-}
-
-function startQuiz() {
-  discardRecording();
-  currentQ = 0; selectedAnswer = null; answers = [];
-  recordings = {}; recordingLabels = {}; copyTexts = {};
-  document.getElementById('resume-banner').classList.add('hidden');
-  show('screen-quiz');
-  buildProgress();
-  renderQuestion();
-}
-
-function buildProgress() {
-  const bar = document.getElementById('progress-bar');
-  bar.innerHTML = questions.map((_, i) => {
-    let cls = '';
-    if (i < currentQ) cls = 'done';
-    else if (i === currentQ) cls = 'current';
-    return '<div class="progress-dot ' + cls + '"></div>';
-  }).join('');
-}
-
-function renderQuestion() {
-  const q = questions[currentQ];
-  document.getElementById('q-number').textContent = '第 ' + q.id + ' / ' + questions.length + ' 题';
-  document.getElementById('q-text').innerHTML = q.text;
-
-  document.getElementById('options').innerHTML = q.options.map(function(opt, i) {
-    return '<div class="option" onclick="selectOption(' + i + ')">' +
-      '<div class="option-letter">' + 'ABCD'[i] + '</div>' +
-      '<div class="option-text">' + opt + '</div></div>';
-  }).join('');
-
-  document.getElementById('explanation').classList.add('hidden');
-  document.getElementById('read-aloud').classList.add('hidden');
-
-  selectedAnswer = null;
-  const btn = document.getElementById('btn-next');
-  btn.disabled = true;
-  btn.textContent = currentQ < questions.length - 1 ? '下一题 \u2192' : '查看结果 \u2192';
-}
-
-function selectOption(index) {
-  if (selectedAnswer !== null) return;
-  selectedAnswer = index;
-
-  const q = questions[currentQ];
-  const opts = document.querySelectorAll('#options .option');
-  opts.forEach(function(opt, i) {
-    opt.classList.add('disabled');
-    if (i === q.answer) opt.classList.add('correct');
-    if (i === index && i !== q.answer) opt.classList.add('wrong');
+function lockOptions(q,choice){
+  document.querySelectorAll('.option').forEach((b,i)=>{
+    b.disabled=true;
+    b.classList.remove('selected');
+    if(i===q.answer)b.classList.add('correct');
+    else if(i===choice)b.classList.add('wrong');
   });
-
-  const isCorrect = index === q.answer;
-  answers.push({
-    correct: isCorrect,
-    type: q.explain.type,
-    detail: q.explain.correct,
-    sentence: q.explain.sentence,
-    qid: q.id
-  });
-
-  const expEl = document.getElementById('explanation');
-  expEl.classList.remove('hidden');
-  expEl.innerHTML =
-    '<div class="explanation-title">' + (isCorrect ? '答对了' : '解析') + '</div>' +
-    '<div class="explanation-body">' + q.explain.correct +
-    '<span class="practice">练习句：' + q.explain.sentence + '</span></div>';
-
-  const key = 'q' + currentQ;
-  const words = q.options.map(stripTags).join('  /  ');
-  recordingLabels[key] = '第 ' + q.id + ' 题　' + words;
-  copyTexts[key] = '第 ' + q.id + ' 题：' + words + '\n练习句：' + q.explain.sentence;
-
-  document.getElementById('read-aloud').classList.remove('hidden');
-  document.getElementById('read-aloud-words').innerHTML =
-    q.options.map(stripTags).join('　') + '<br><span style="font-size:13px;color:#8c7b6b;">' + q.explain.sentence + '</span>';
-  document.getElementById('record-slot').innerHTML = '<div id="record-' + key + '"></div>';
-  updateRecordUI(key);
-
-  document.getElementById('btn-next').disabled = false;
-  saveState();
 }
-
-function nextQuestion() {
-  stopRecording();
-  if (currentQ < questions.length - 1) {
-    currentQ++;
-    selectedAnswer = null;
-    buildProgress();
-    renderQuestion();
-    saveState();
-  } else {
-    showResults();
-  }
+function showReveal(q,ok){
+  const correctAnswer=ok?'':'<p><strong>正确答案：</strong>'+q.options[q.answer]+'</p>';
+  const verdict=ok?'<div class="verdict ok">答对了</div>':'';
+  $('reveal').innerHTML=verdict+correctAnswer+'<p>'+q.reveal+'</p><div class="memory">'+q.memory+'</div><h3 style="margin-top:17px">目标单词</h3>'+wordsHTML(q.targets)+'<h3>练习句</h3><div class="sentence">'+q.sentence+'</div><div class="small">'+q.prompt+'</div><div id="quizRecorder"></div>';
+  $('reveal').classList.remove('hidden');
+  mountRecorder('quizRecorder','q'+current);
+  $('nextBtn').textContent=current===6?'查看我的报告 →':'下一题 →';
+  $('nextBtn').classList.remove('hidden');
 }
-
-function showResults() {
-  const score = answers.filter(function(a) { return a.correct; }).length;
-  document.getElementById('result-score').textContent = score + '/' + questions.length;
-
-  let label = '';
-  if (score === questions.length) label = '发音感觉很好，基础非常扎实';
-  else if (score >= 6) label = '不错，但有几个发音盲区要关注';
-  else if (score >= 4) label = '有提升空间，试试下面的建议';
-  else label = '刚开始，现在补起来刚刚好';
-  document.getElementById('result-label').textContent = label;
-
-  const wrongTypes = {};
-  answers.forEach(function(a) {
-    if (!a.correct && !wrongTypes[a.type]) {
-      wrongTypes[a.type] = { detail: a.detail, sentence: a.sentence };
+function showAnswered(){
+  const q=questions[current],a=answers[current];
+  selected=a.choice;
+  lockOptions(q,a.choice);
+  $('submitBtn').classList.add('hidden');
+  showReveal(q,a.correct);
+}
+function submit(){
+  const q=questions[current],ok=selected===q.answer;
+  answers[current]={choice:selected,correct:ok};
+  lockOptions(q,selected);
+  $('submitBtn').classList.add('hidden');
+  showReveal(q,ok);
+  save();
+}
+function previous(){stopActive();if(current>0){current--;render();save()}}
+function next(){stopActive();if(current<6){current++;render();save()}else results()}
+function results(){
+  stopActive();clear();show('results');
+  const right=answers.filter(a=>a&&a.correct).length;
+  const wrong=questions.map((q,i)=>({q,i})).filter(x=>!answers[x.i]||!answers[x.i].correct);
+  const encouragement=right<=3
+    ?'很棒，你已经找到了最值得练习的方向！这次发现得越多，接下来的提升就会越明显。'
+    :right<=5
+      ?'很不错！你已经掌握了大部分发音要点。再把几个小细节练准确，发音会更自然、更漂亮。'
+      :right===6
+        ?'太棒了！你对英语发音很敏锐，只剩一个小细节值得打磨。'
+        :'哇哦，7题全对！你的发音知识和发音意识都很扎实。继续朗读和回听，把正确动作变成稳定习惯吧！';
+  $('encouragement').textContent=encouragement;
+  $('rightCount').textContent=right+' / 7';
+  $('blindCount').textContent=wrong.length;
+  $('blindspotSection').classList.toggle('hidden',wrong.length===0);
+  $('prescriptionSection').classList.toggle('hidden',wrong.length===0);
+  $('reportList').innerHTML=wrong.map(x=>{
+    const q=x.q,a=answers[x.i];
+    return '<div class="report"><span class="tag bad">第 '+(x.i+1)+' 题 · 答错</span><h3>'+q.name+'</h3><div class="small">你的选择：'+(a?q.options[a.choice].replace(/<[^>]+>/g,''):'未作答')+'</div><p><strong>正确答案：</strong>'+q.options[q.answer].replace(/<[^>]+>/g,'')+'</p><p>'+q.diagnosis+'</p></div>';
+  }).join('');
+  $('prescriptions').innerHTML=wrong.map(x=>rxHTML(x.q,x.i)).join('');
+  wrong.forEach(x=>mountRecorder('rx-rec-'+x.i,'rx'+x.i,'● 练习后录音（可选）'));
+  $('finalRecorder').innerHTML='<div id="rec-final"></div>';
+  mountRecorder('rec-final','final','● 朗读录音（可选）');
+}
+function rxHTML(q,i){return '<div class="rx"><div class="eyebrow">处方 '+(i+1)+'</div><h3>'+q.name+'</h3><p><strong>动作提醒：</strong>'+q.memory+'</p><h3>词汇</h3>'+wordsHTML(q.practiceWords)+'<h3>句子</h3>'+q.practiceSentences.map(s=>'<div class="sentence">'+s+'</div>').join('')+'<div id="rx-rec-'+i+'"></div></div>'}
+function mountRecorder(container,key,label='● 开始录音（可选）'){const el=$(container);if(!el)return;el.innerHTML='<div class="recorder"><div class="timer" id="timer-'+key+'"></div><div class="rec-row"><button class="btn record-primary" id="start-'+key+'">'+label+'</button><button class="btn record-stop hidden" id="stop-'+key+'">停止录音</button><button class="btn secondary hidden" id="redo-'+key+'">重新录音</button></div><div id="audio-'+key+'"></div></div>';$('start-'+key).onclick=()=>record(key);$('stop-'+key).onclick=stopActive;$('redo-'+key).onclick=()=>record(key);if(recordings[key])drawAudio(key)}
+async function record(key){try{stopActive();const stream=await navigator.mediaDevices.getUserMedia({audio:true});activeStream=stream;const chunks=[],type=MediaRecorder.isTypeSupported('audio/mp4')?'audio/mp4':'audio/webm';const mr=new MediaRecorder(stream,{mimeType:type});activeRecorder=mr;mr.ondataavailable=e=>{if(e.data.size)chunks.push(e.data)};mr.onstop=()=>{const blob=new Blob(chunks,{type});recordings[key]={url:URL.createObjectURL(blob),blob,type};drawAudio(key);stream.getTracks().forEach(t=>t.stop())};mr.start();let sec=0;$('start-'+key).classList.add('hidden');$('redo-'+key).classList.add('hidden');$('stop-'+key).classList.remove('hidden');$('timer-'+key).textContent=' · 00:00';activeTimer=setInterval(()=>{sec++;$('timer-'+key).textContent=' · '+String(Math.floor(sec/60)).padStart(2,'0')+':'+String(sec%60).padStart(2,'0')},1000)}catch(e){alert('无法使用麦克风。请允许浏览器访问麦克风，或换到系统浏览器后再试。')}}
+function stopActive(){if(activeTimer){clearInterval(activeTimer);activeTimer=null}if(activeRecorder&&activeRecorder.state!=='inactive')activeRecorder.stop();activeRecorder=null;if(activeStream){activeStream.getTracks().forEach(t=>t.stop());activeStream=null}document.querySelectorAll('[id^="stop-"]').forEach(b=>b.classList.add('hidden'));document.querySelectorAll('[id^="redo-"]').forEach(b=>b.classList.remove('hidden'))}
+function drawAudio(key){const box=$('audio-'+key),rec=recordings[key];if(box&&rec)box.innerHTML='<audio class="audio" controls src="'+rec.url+'"></audio><button class="btn ghost share-btn" onclick="shareRecording(\''+key+'\')">分享或保存录音</button>'}
+async function shareRecording(key){
+  const rec=recordings[key];if(!rec)return;
+  const ext=rec.type.includes('mp4')?'m4a':'webm';
+  const file=new File([rec.blob],'CAROL-WORKS-发音练习.'+ext,{type:rec.type});
+  try{
+    if(navigator.share&&navigator.canShare&&navigator.canShare({files:[file]})){
+      await navigator.share({files:[file],title:'CAROL WORKS 发音练习录音'});
+      return;
     }
-  });
-
-  let details = '';
-  if (Object.keys(wrongTypes).length === 0) {
-    details = '<div class="strength-summary">全部答对！你对发音的感觉非常敏锐。</div>';
-  } else {
-    details = '<div class="section-title">你的发音盲区</div>';
-    for (const type in wrongTypes) {
-      details += '<div class="blindspot-group"><div class="blindspot-title">' + type +
-        '</div><div class="blindspot-text">' + wrongTypes[type].detail +
-        '<span class="practice">练习句：' + wrongTypes[type].sentence + '</span></div></div>';
-    }
-  }
-  document.getElementById('result-details').innerHTML = details;
-
-  const unique = [];
-  answers.forEach(function(a) {
-    if (!a.correct && unique.indexOf(a.sentence) === -1) unique.push(a.sentence);
-  });
-  const practiceSection = document.getElementById('practice-section');
-  if (unique.length > 0) {
-    practiceSection.classList.remove('hidden');
-    document.getElementById('practice-sentences').innerHTML = unique.map(function(s, i) {
-      return '<div class="ps-item"><span class="ps-num">' + (i + 1) + '</span>' + s + '</div>';
-    }).join('');
-  } else {
-    practiceSection.classList.add('hidden');
-  }
-
-  const recCount = Object.keys(recordings).length;
-  const btnView = document.getElementById('btn-view-recordings');
-  if (recCount > 0) {
-    btnView.classList.remove('hidden');
-    btnView.textContent = '查看我录的 ' + recCount + ' 段发音';
-  } else {
-    btnView.classList.add('hidden');
-  }
-
-  show('screen-result');
+  }catch(e){if(e.name==='AbortError')return}
+  const a=document.createElement('a');a.href=rec.url;a.download=file.name;document.body.appendChild(a);a.click();a.remove();
 }
-
-function copyResult() {
-  const score = answers.filter(function(a) { return a.correct; }).length;
-  const types = [];
-  answers.forEach(function(a) {
-    if (!a.correct && types.indexOf(a.type) === -1) types.push(a.type);
-  });
-  const text = '我的英语发音自测结果：' + score + '/' + questions.length + '\n' +
-    (types.length ? '主要盲区：' + types.join('、') : '全部答对，继续保持！') +
-    '\n\n来自 heycarolzhao.github.io';
-  if (navigator.clipboard && navigator.clipboard.writeText) {
-    navigator.clipboard.writeText(text).then(function() {
-      const btn = document.getElementById('btn-copy-result');
-      const old = btn.textContent;
-      btn.textContent = '已复制';
-      setTimeout(function() { btn.textContent = old; }, 1500);
-    });
-  }
-}
-
-/* ---------- sentence challenge ---------- */
-function getChallengeSentences() {
-  const wrong = [];
-  answers.forEach(function(a) {
-    if (!a.correct && wrong.indexOf(a.sentence) === -1) wrong.push(a.sentence);
-  });
-  if (wrong.length > 0) return wrong.slice(0, 2);
-  return questions.slice(0, 2).map(function(q) { return q.explain.sentence; });
-}
-
-function showChallenge() {
-  const sentences = getChallengeSentences();
-  document.getElementById('challenge-sentences').innerHTML = sentences.map(function(s, i) {
-    return '<div class="ps-item"><span class="ps-num">' + (i + 1) + '</span>' + s + '</div>';
-  }).join('');
-  recordingLabels['sentence'] = '句子挑战';
-  copyTexts['sentence'] = '句子练习：\n' + sentences.join('\n');
-  updateRecordUI('sentence');
-  show('screen-challenge');
-}
-
-function finishChallenge() {
-  stopRecording();
-  if (Object.keys(recordings).length > 0) showSummary();
-  else showForm();
-}
-function skipChallenge() {
-  stopRecording();
-  if (Object.keys(recordings).length > 0) showSummary();
-  else showForm();
-}
-
-/* ---------- recording summary ---------- */
-function showSummary() {
-  stopRecording();
-  const keys = Object.keys(recordings);
-  const list = document.getElementById('recording-list');
-  if (keys.length === 0) {
-    list.innerHTML = '<div class="empty-note">还没有录音</div>';
-    document.getElementById('btn-share-all').classList.add('hidden');
-    document.getElementById('btn-download-all').classList.add('hidden');
-  } else {
-    list.innerHTML = keys.map(function(key) {
-      const label = recordingLabels[key] || key;
-      let tag = '';
-      if (key.indexOf('q') === 0) {
-        const idx = parseInt(key.slice(1), 10);
-        const a = answers[idx];
-        if (a) tag = a.correct ? '<span class="audio-tag">答对</span>' : '<span class="audio-tag wrong">答错</span>';
-      }
-      return '<div class="audio-item"><div class="audio-meta"><span class="audio-label">' +
-        label + '</span>' + tag + '</div><audio controls src="' + recordings[key].url + '"></audio></div>';
-    }).join('');
-    document.getElementById('btn-share-all').classList.remove('hidden');
-    if (navigator.canShare) document.getElementById('btn-download-all').classList.add('hidden');
-    else document.getElementById('btn-download-all').classList.remove('hidden');
-  }
-  show('screen-summary');
-}
-
-async function shareAllRecordings() {
-  const keys = Object.keys(recordings);
-  if (keys.length === 0) return;
-  const files = keys.map(function(key) {
-    const idx = keys.indexOf(key) + 1;
-    return new File([recordings[key].blob], '发音练习-' + idx + '.' + fileExt(), { type: mimeType() });
-  });
-  if (navigator.canShare && navigator.canShare({ files: files })) {
-    try {
-      await navigator.share({
-        files: files,
-        title: '我的发音练习',
-        text: '这是我的发音练习录音，请帮我听听'
-      });
-    } catch (e) {}
-  } else {
-    downloadAllRecordings();
-  }
-}
-
-function downloadAllRecordings() {
-  const keys = Object.keys(recordings);
-  keys.forEach(function(key, i) {
-    setTimeout(function() {
-      const a = document.createElement('a');
-      a.href = recordings[key].url;
-      a.download = '发音练习-' + (i + 1) + '.' + fileExt();
-      a.click();
-    }, i * 400);
-  });
-}
-
-/* ---------- recording engine ---------- */
-function updateRecordUI(key) {
-  const slot = document.getElementById('record-' + key);
-  if (!slot) return;
-  const isRecording = mediaRecorder && mediaRecorder.state === 'recording' && currentRecordKey === key;
-
-  if (isWeChat) {
-    const copyLabel = key === 'sentence' ? '复制这两个句子' : '复制这几个词';
-    slot.innerHTML =
-      '<div class="wechat-record"><p>微信里不能直接录音。复制下面的内容，粘到微信聊天框，按住说话时就能边看边读。</p>' +
-      '<button class="btn btn-secondary" onclick="copyPrompt(\'' + key + '\')">' + copyLabel + '</button>' +
-      '<div class="copy-ok hidden" id="copy-ok-' + key + '">已复制，去微信粘贴吧</div></div>';
-    return;
-  }
-
-  if (isRecording) {
-    slot.innerHTML =
-      '<div class="recording-box"><span class="rec-dot"></span>' +
-      '<span class="timer" id="timer-' + key + '">0:00</span>' +
-      '<button class="btn-small" onclick="stopRecording()">停止</button></div>';
-    return;
-  }
-
-  if (recordings[key]) {
-    slot.innerHTML =
-      '<div class="record-done-box"><audio controls src="' + recordings[key].url + '"></audio>' +
-      '<div class="record-actions">' +
-      '<button class="btn-small" onclick="startRecording(\'' + key + '\')">重录</button>' +
-      '<button class="btn-small" onclick="deleteRecording(\'' + key + '\')">删除</button>' +
-      '</div></div>';
-    return;
-  }
-
-  slot.innerHTML =
-    '<button class="btn btn-secondary" onclick="startRecording(\'' + key + '\')">点一下开始读，读完再点一下停</button>';
-}
-
-async function startRecording(key) {
-  if (isWeChat) return;
-  if (mediaRecorder && mediaRecorder.state === 'recording') return;
-  try {
-    currentStream = await navigator.mediaDevices.getUserMedia({ audio: true });
-    mediaRecorder = new MediaRecorder(currentStream, { mimeType: mimeType() });
-    audioChunks = [];
-    currentRecordKey = key;
-    recordSeconds = 0;
-
-    mediaRecorder.ondataavailable = function(e) {
-      if (e.data.size > 0) audioChunks.push(e.data);
-    };
-    mediaRecorder.onstop = function() {
-      if (currentStream) currentStream.getTracks().forEach(function(t) { t.stop(); });
-      clearInterval(recordTimer);
-      const blob = new Blob(audioChunks, { type: mimeType() });
-      recordings[key] = { blob: blob, url: URL.createObjectURL(blob), duration: recordSeconds };
-      const doneKey = currentRecordKey;
-      currentRecordKey = null;
-      updateRecordUI(doneKey);
-    };
-
-    mediaRecorder.start();
-    updateRecordUI(key);
-    recordTimer = setInterval(function() {
-      recordSeconds++;
-      const el = document.getElementById('timer-' + key);
-      if (el) {
-        const m = Math.floor(recordSeconds / 60);
-        const s = recordSeconds % 60;
-        el.textContent = m + ':' + (s < 10 ? '0' : '') + s;
-      }
-      if (recordSeconds >= 60) stopRecording();
-    }, 1000);
-  } catch (err) {
-    const slot = document.getElementById('record-' + key);
-    if (slot) slot.innerHTML = '<p style="font-size:13px;color:#c44;text-align:center;">无法访问麦克风，请在浏览器设置里允许</p>';
-  }
-}
-
-function stopRecording() {
-  if (mediaRecorder && mediaRecorder.state === 'recording') {
-    mediaRecorder.stop();
-  }
-  clearInterval(recordTimer);
-}
-
-function discardRecording() {
-  if (mediaRecorder && mediaRecorder.state === 'recording') {
-    mediaRecorder.onstop = null;
-    mediaRecorder.stop();
-  }
-  if (currentStream) currentStream.getTracks().forEach(function(t) { t.stop(); });
-  clearInterval(recordTimer);
-  currentRecordKey = null;
-  audioChunks = [];
-}
-
-function deleteRecording(key) {
-  if (recordings[key]) {
-    URL.revokeObjectURL(recordings[key].url);
-    delete recordings[key];
-  }
-  updateRecordUI(key);
-}
-
-function copyPrompt(key) {
-  const text = copyTexts[key] || '';
-  if (navigator.clipboard && navigator.clipboard.writeText) {
-    navigator.clipboard.writeText(text).then(function() {
-      const ok = document.getElementById('copy-ok-' + key);
-      if (ok) {
-        ok.classList.remove('hidden');
-        setTimeout(function() { ok.classList.add('hidden'); }, 2500);
-      }
-    });
-  }
-}
-
-/* ---------- form & qr ---------- */
-function showForm() {
-  stopRecording();
-  show('screen-form');
-}
-
-function revealQR() {
-  const nick = document.getElementById('input-nickname').value.trim();
-  const goal = document.getElementById('input-goal').value;
-  document.getElementById('error-nickname').classList.add('hidden');
-  document.getElementById('error-goal').classList.add('hidden');
-
-  let ok = true;
-  if (!nick) { document.getElementById('error-nickname').classList.remove('hidden'); ok = false; }
-  if (!goal) { document.getElementById('error-goal').classList.remove('hidden'); ok = false; }
-  if (!ok) return;
-
-  const noteEl = document.getElementById('personal-note');
-  noteEl.classList.remove('hidden');
-  noteEl.innerHTML = nick + '，看到你的目标是<strong>' + goal + '</strong>，<br>' + (goalNotes[goal] || '我会根据你的情况给你针对性建议') + '。';
-
-  show('screen-qr');
-}
-
-/* ---------- state ---------- */
-function saveState(screenId) {
-  try {
-    const data = {
-      screen: screenId || document.querySelector('[id^="screen-"]:not(.hidden)').id,
-      currentQ: currentQ,
-      answers: answers
-    };
-    localStorage.setItem('pronunciation-test-v3', JSON.stringify(data));
-  } catch (e) {}
-}
-
-function loadState() {
-  try {
-    return JSON.parse(localStorage.getItem('pronunciation-test-v3'));
-  } catch (e) {
-    return null;
-  }
-}
-
-function resumeQuiz() {
-  const saved = loadState();
-  if (!saved) return startQuiz();
-  answers = saved.answers || [];
-  if (answers.length >= questions.length) {
-    showResults();
-    return;
-  }
-  currentQ = answers.length;
-  selectedAnswer = null;
-  document.getElementById('resume-banner').classList.add('hidden');
-  show('screen-quiz');
-  buildProgress();
-  renderQuestion();
-}
-
-init();
+$('startBtn').onclick=()=>start(true);$('submitBtn').onclick=submit;$('nextBtn').onclick=next;$('prevBtn').onclick=previous;$('restartBtn').onclick=()=>start(true);$('resumeBtn').onclick=()=>{const s=JSON.parse(localStorage.getItem('carol-works-pronunciation-v1')||'null');if(!s)return start(true);current=Math.min(s.current||0,6);answers=s.answers||[];show('quiz');render()};
+try{const saved=JSON.parse(localStorage.getItem('carol-works-pronunciation-v1')||'null');if(saved&&saved.answers&&saved.answers.length){$('resumeBtn').classList.remove('hidden')}}catch(e){}
 </script>
-
 </body>
 </html>
